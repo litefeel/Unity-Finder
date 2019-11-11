@@ -5,22 +5,22 @@ namespace litefeel.Finder.Editor
 {
     static class MenuItems
     {
-        [MenuItem("Window/LiteFeel/Finder/FindMaterails")]
+        [MenuItem("Assets/LiteFeel/Finder/FindMaterails")]
         static void FindMaterails()
         {
             ShowWindow<FindMaterialsWindow>();
         }
-        [MenuItem("Window/LiteFeel/Finder/FindSprites")]
+        [MenuItem("Assets/LiteFeel/Finder/FindSprites")]
         static void FindSprites()
         {
             ShowWindow<FindSpritesWindow>();
         }
-        [MenuItem("Window/LiteFeel/Finder/FindTexts")]
+        [MenuItem("Assets/LiteFeel/Finder/FindTexts")]
         static void FindTexts()
         {
             ShowWindow<FindTextsWindow>();
         }
-        [MenuItem("Window/LiteFeel/Finder/FindFontInPrefab")]
+        [MenuItem("Assets/LiteFeel/Finder/FindFontInPrefab")]
         static void FindFontInPrefab()
         {
             ShowWindow<FindFontInPrefabWindow>();
@@ -31,13 +31,14 @@ namespace litefeel.Finder.Editor
             ShowWindow<FindScriptWindow>();
         }
 
-        private static void ShowWindow<T>(string title = null) where T : EditorWindow
+        private static void ShowWindow<T>(string title = null) where T : EditorWindow, IFinderWindow
         {
             if (string.IsNullOrEmpty(title))
             {
                 title = typeof(T).Name;
             }
             var window = EditorWindow.GetWindow<T>();
+            window.InitAsset(Selection.activeObject);
             window.titleContent = new UnityEngine.GUIContent(title);
             window.Show();
         }

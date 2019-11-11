@@ -5,23 +5,20 @@ using UnityEngine.UI;
 
 namespace litefeel.Finder.Editor
 {
-    public class FindScriptWindow : EditorWindow
+    class FindScriptWindow : FinderWindowBase<MonoScript>
     {
-
-        private MonoScript m_Script;
         private System.Type m_ScriptType;
-        private List<GameObject> m_Mats = new List<GameObject>();
-        private string[] m_MatNames;
-        private Vector2 m_ScrollPos = Vector2.zero;
-        private int m_SelectedIdx = 0;
+        private List<GameObject> m_Assets = new List<GameObject>();
+        private string[] m_AssetNames;
 
-        private void OnGUI()
+        protected override void OnGUI()
         {
-            m_Script = EditorGUILayout.ObjectField("Script", m_Script, typeof(MonoScript), false) as MonoScript;
+            base.OnGUI();
+            
             m_ScriptType = null;
-            if (m_Script != null)
+            if (m_Asset != null)
             {
-                m_ScriptType = m_Script.GetClass();
+                m_ScriptType = m_Asset.GetClass();
                 if (!typeof(Component).IsAssignableFrom(m_ScriptType))
                 {
                     m_ScriptType = null;
@@ -34,17 +31,17 @@ namespace litefeel.Finder.Editor
                 if (GUILayout.Button("Find"))
                     Find();
             }
-            var count = m_MatNames != null ? m_MatNames.Length : 0;
+            var count = m_AssetNames != null ? m_AssetNames.Length : 0;
             EditorGUILayout.LabelField(string.Format("Count:{0}", count));
             if (count > 0)
             {
                 m_ScrollPos = EditorGUILayout.BeginScrollView(m_ScrollPos);
-                if (m_SelectedIdx >= m_MatNames.Length)
+                if (m_SelectedIdx >= m_AssetNames.Length)
                     m_SelectedIdx = 0;
-                m_SelectedIdx = GUILayout.SelectionGrid(m_SelectedIdx, m_MatNames, 1, EditorStyles.miniButton, GUILayout.ExpandHeight(false));
+                m_SelectedIdx = GUILayout.SelectionGrid(m_SelectedIdx, m_AssetNames, 1, EditorStyles.miniButton, GUILayout.ExpandHeight(false));
                 EditorGUILayout.EndScrollView();
 
-                SelectionUtil.Select(m_Mats[m_SelectedIdx]);
+                SelectionUtil.Select(m_Assets[m_SelectedIdx]);
             }
         }
 
@@ -52,16 +49,16 @@ namespace litefeel.Finder.Editor
         private List<Component> m_Images = new List<Component>();
         private void Find()
         {
-            m_Mats.Clear();
+            m_Assets.Clear();
             Finder.ForeachPrefabs((prefab, path) =>
             {
                 m_Images.Clear();
                 var componets = prefab.GetComponentsInChildren(m_ScriptType, true);
                 if (componets != null && componets.Length > 0)
-                    m_Mats.Add(prefab);
+                    m_Assets.Add(prefab);
             }, true);
-            FillNames(m_Mats, ref m_MatNames);
-            Debug.Log($"XXX {m_Mats.Count}");
+            FillNames(m_Assets, ref m_AssetNames);
+            Debug.Log($"XXX {m_Assets.Count}");
         }
 
         private void FillNames(List<GameObject> mats, ref string[] matNames)

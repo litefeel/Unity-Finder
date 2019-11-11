@@ -5,19 +5,16 @@ using UnityEngine.UI;
 
 namespace litefeel.Finder.Editor
 {
-    public class FindSpritesWindow : EditorWindow
+    class FindSpritesWindow : FinderWindowBase<Sprite>
     {
 
-        private Sprite m_Sprite;
         private readonly List<GameObject> m_Mats = new List<GameObject>();
         private string[] m_MatNames;
-        private Vector2 m_ScrollPos = Vector2.zero;
-        private int m_SelectedIdx = 0;
 
-        private void OnGUI()
+        protected override void OnGUI()
         {
-            m_Sprite = EditorGUILayout.ObjectField("Sprite", m_Sprite, typeof(Sprite), false) as Sprite;
-            using (new EditorGUI.DisabledScope(m_Sprite == null))
+            base.OnGUI();
+            using (new EditorGUI.DisabledScope(m_Asset == null))
             {
                 if (GUILayout.Button("Find"))
                     FindSprites();
@@ -48,7 +45,7 @@ namespace litefeel.Finder.Editor
                 foreach (var img in m_Images)
                 {
                     Debug.Log($"Sprite {path}, {GetName(img.sprite)}, {GetName(img.overrideSprite)}", img);
-                    if (img.sprite == m_Sprite || img.overrideSprite == m_Sprite)
+                    if (img.sprite == m_Asset || img.overrideSprite == m_Asset)
                     {
                         m_Mats.Add(prefab);
                         break;

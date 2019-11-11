@@ -4,19 +4,17 @@ using UnityEngine;
 
 namespace litefeel.Finder.Editor
 {
-    public class FindMaterialsWindow : EditorWindow
+    class FindMaterialsWindow : FinderWindowBase<Shader>
     {
 
-        private Shader m_Shader;
         private readonly List<Material> m_Mats = new List<Material>();
         private string[] m_MatNames;
-        private Vector2 m_ScrollPos = Vector2.zero;
-        private int m_SelectedIdx = 0;
 
-        private void OnGUI()
+        protected override void OnGUI()
         {
-            m_Shader = EditorGUILayout.ObjectField("Shader", m_Shader, typeof(Shader), false) as Shader;
-            using (new EditorGUI.DisabledScope(m_Shader == null))
+            base.OnGUI();
+
+            using (new EditorGUI.DisabledScope(m_Asset == null))
             {
                 if (GUILayout.Button("Find"))
                     FindMaterials();
@@ -39,7 +37,7 @@ namespace litefeel.Finder.Editor
         private void FindMaterials()
         {
             m_Mats.Clear();
-            Finder.FindMaterials(m_Shader, m_Mats);
+            Finder.FindMaterials(m_Asset, m_Mats);
             FillMatNames(m_Mats, ref m_MatNames);
             Debug.Log($"XXX {m_Mats.Count}");
         }

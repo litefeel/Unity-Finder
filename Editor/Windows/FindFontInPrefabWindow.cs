@@ -6,20 +6,17 @@ using UnityEngine.UI;
 
 namespace litefeel.Finder.Editor
 {
-    public class FindFontInPrefabWindow : EditorWindow
+    class FindFontInPrefabWindow : FinderWindowBase<Font>
     {
 
-        private Font m_Font;
         private readonly List<Text> m_Texts = new List<Text>();
         private string[] m_TextNames;
-        private Vector2 m_ScrollPos = Vector2.zero;
-        private int m_SelectedIdx = 0;
 
-        private void OnGUI()
+        protected override void OnGUI()
         {
-            m_Font = EditorGUILayout.ObjectField("Font", m_Font, typeof(Font), false) as Font;
+            base.OnGUI();
             //selection = AssetDatabase.LoadAssetAtPath(selectedPath, typeof(DefaultAsset)) as DefaultAsset;
-            using (new EditorGUI.DisabledScope(m_Font == null))
+            using (new EditorGUI.DisabledScope(m_Asset == null))
             {
                 if (GUILayout.Button("Find"))
                     FindTexts();
@@ -49,7 +46,7 @@ namespace litefeel.Finder.Editor
             m_Texts.Clear();
             foreach(var txt in texts)
             {
-                if (txt.font == m_Font)
+                if (txt.font == m_Asset)
                     m_Texts.Add(txt);
             }
             
