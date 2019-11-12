@@ -105,21 +105,37 @@ namespace litefeel.Finder.Editor
         }
 
         private static List<Material> s_TempMats = new List<Material>();
-        private static void ForeachMats(Action<Material, string> action)
+        private static void ForeachMats(Action<Material, string> action, bool showProgress = true, string[] searchInFolders = null)
         {
-            var guids = AssetDatabase.FindAssets("t:Material");
-            foreach (var guid in guids)
+
+            var guids = AssetDatabase.FindAssets("t:Material", searchInFolders);
+            var count = guids.Length;
+            if (showProgress)
+                EditorUtility.DisplayCancelableProgressBar("Progress Materials", $"0/{count}", 0);
+            try
             {
-                var matPath = AssetDatabase.GUIDToAssetPath(guid);
-                if (s_TempMats == null)
-                    s_TempMats = new List<Material>();
-                s_TempMats.Clear();
-                LoadAssetsAtPath(matPath, s_TempMats);
-                foreach (var mat in s_TempMats)
+                for (var i = 0; i < count; i++)
                 {
-                    //Debug.Log($"matPath: {matPath}, {mat.name}, {mat.shader.name}", mat);
-                    action(mat, matPath);
+                    if (showProgress)
+                    {
+                        if (EditorUtility.DisplayCancelableProgressBar("Progress Prefabs", $"{i}/{count}", i / (float)count))
+                            break;
+                    }
+                    var matPath = AssetDatabase.GUIDToAssetPath(guids[i]);
+                    if (s_TempMats == null)
+                        s_TempMats = new List<Material>();
+                    s_TempMats.Clear();
+                    LoadAssetsAtPath(matPath, s_TempMats);
+                    foreach (var mat in s_TempMats)
+                    {
+                        //Debug.Log($"matPath: {matPath}, {mat.name}, {mat.shader.name}", mat);
+                        action(mat, matPath);
+                    }
                 }
+            }
+            finally
+            {
+                EditorUtility.ClearProgressBar();
             }
         }
 
@@ -211,7 +227,7 @@ namespace litefeel.Finder.Editor
             return mats.Count - count;
         }
 
-        internal static int FindMaterials(Shader shader, List<Material> mats)
+        internal static int FindMaterials(Shader shader, List<Material> mats, string[] searchInFolders)
         {
             if (shader == null || mats == null) return 0;
             var count = mats.Count;
@@ -219,7 +235,7 @@ namespace litefeel.Finder.Editor
             {
                 if (mat.shader == shader)
                     mats.Add(mat);
-            });
+            }, true, searchInFolders);
             return mats.Count - count;
         }
 

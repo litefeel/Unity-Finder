@@ -6,36 +6,20 @@ using UnityEngine.UI;
 
 namespace litefeel.Finder.Editor
 {
-    class FindFontInPrefabWindow : FinderWindowBase<Font>
+    class FindFontInPrefabWindow : FinderWindowBase<Font, Text>
     {
-
-        private readonly List<Text> m_Texts = new List<Text>();
-        private string[] m_TextNames;
-
         protected override void OnGUI()
         {
+            m_IgnoreSearchFolder = true;
             base.OnGUI();
-            //selection = AssetDatabase.LoadAssetAtPath(selectedPath, typeof(DefaultAsset)) as DefaultAsset;
-            using (new EditorGUI.DisabledScope(m_Asset == null))
-            {
-                if (GUILayout.Button("Find"))
-                    FindTexts();
-            }
-            var count = m_TextNames != null ? m_TextNames.Length : 0;
-            EditorGUILayout.LabelField(string.Format("Count:{0}", count));
-            if (count > 0)
-            {
-                m_ScrollPos = EditorGUILayout.BeginScrollView(m_ScrollPos);
-                if (m_SelectedIdx >= m_TextNames.Length)
-                    m_SelectedIdx = 0;
-                m_SelectedIdx = GUILayout.SelectionGrid(m_SelectedIdx, m_TextNames, 1, EditorStyles.miniButton, GUILayout.ExpandHeight(false));
-                EditorGUILayout.EndScrollView();
-
-                SelectionUtil.Select(m_Texts[m_SelectedIdx]);
-            }
+            m_DisableFind = m_Asset == null;
         }
 
-        private void FindTexts()
+        protected override void OnGUISearchFolder()
+        {
+        }
+
+        protected override void DoFind()
         {
             var prefabStage = PrefabStageUtility.GetCurrentPrefabStage();
             if (prefabStage == null) return;
@@ -43,25 +27,23 @@ namespace litefeel.Finder.Editor
             var texts = new List<Text>();
             prefabStage.prefabContentsRoot.GetComponentsInChildren(true, texts);
 
-            m_Texts.Clear();
+            m_Items.Clear();
             foreach(var txt in texts)
             {
                 if (txt.font == m_Asset)
-                    m_Texts.Add(txt);
+                    m_Items.Add(txt);
             }
             
-            FillMatNames(m_Texts, ref m_TextNames);
-            Debug.Log($"XXX {m_Texts.Count}");
+            FillMatNames(m_Items);
         }
 
-        private void FillMatNames(List<Text> mats, ref string[] matNames)
+        private void FillMatNames(List<Text> mats)
         {
-            if (matNames == null || matNames.Length != mats.Count)
-                matNames = new string[mats.Count];
+            m_ItemNames.Clear();
 
             for (var i = 0; i < mats.Count; i++)
             {
-                matNames[i] = mats[i].name;
+                m_ItemNames.Add(mats[i].name);
             }
         }
     }

@@ -1,15 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace litefeel.Finder.Editor
 {
-    class FindScriptWindow : FinderWindowBase<MonoScript>
+    class FindScriptWindow : FinderWindowBase<MonoScript, GameObject>
     {
         private System.Type m_ScriptType;
-        private List<GameObject> m_Assets = new List<GameObject>();
-        private string[] m_AssetNames;
 
         protected override void OnGUI()
         {
@@ -27,50 +27,31 @@ namespace litefeel.Finder.Editor
                 }
             }
             m_DisableFind = m_ScriptType == null;
-
-            var count = m_AssetNames != null ? m_AssetNames.Length : 0;
-            EditorGUILayout.LabelField(string.Format("Count:{0}", count));
-            if (count > 0)
-            {
-                m_ScrollPos = EditorGUILayout.BeginScrollView(m_ScrollPos);
-                if (m_SelectedIdx >= m_AssetNames.Length)
-                    m_SelectedIdx = 0;
-                m_SelectedIdx = GUILayout.SelectionGrid(m_SelectedIdx, m_AssetNames, 1, EditorStyles.miniButton, GUILayout.ExpandHeight(false));
-                EditorGUILayout.EndScrollView();
-
-                SelectionUtil.Select(m_Assets[m_SelectedIdx]);
-            }
         }
 
-
-        private List<Component> m_Images = new List<Component>();
-        private void Find()
+        protected override void DoFind()
         {
-            m_Assets.Clear();
+            base.DoFind();
+
+            m_Items.Clear();
+            m_ItemNames.Clear();
             Finder.ForeachPrefabs((prefab, path) =>
             {
-                m_Images.Clear();
                 var componets = prefab.GetComponentsInChildren(m_ScriptType, true);
                 if (componets != null && componets.Length > 0)
-                    m_Assets.Add(prefab);
-            }, true);
-            FillNames(m_Assets, ref m_AssetNames);
-            Debug.Log($"XXX {m_Assets.Count}");
+                {
+                    m_Items.Add(prefab);
+                    m_ItemNames.Add(AssetDatabase.GetAssetPath(prefab));
+                }
+            }, true, GetSearchInFolders());
+            m_SimpleTreeView.Reload();
         }
 
-        private void FillNames(List<GameObject> mats, ref string[] matNames)
+        protected override void OnItemDoubleClick(int index)
         {
-            if (matNames == null || matNames.Length != mats.Count)
-                matNames = new string[mats.Count];
-
-            for (var i = 0; i < mats.Count; i++)
-            {
-                var path = AssetDatabase.GetAssetPath(mats[i]);
-                //if (!path.EndsWith(".mat"))
-                //    path += ".mat";
-                matNames[i] = path;
-            }
+            AssetDatabase.OpenAsset(m_Items[index]);
         }
+
     }
 }
 

@@ -5,39 +5,19 @@ using UnityEngine.UI;
 
 namespace litefeel.Finder.Editor
 {
-    class FindSpritesWindow : FinderWindowBase<Sprite>
+    class FindSpritesWindow : FinderWindowBase<Sprite, GameObject>
     {
-
-        private readonly List<GameObject> m_Mats = new List<GameObject>();
-        private string[] m_MatNames;
-
         protected override void OnGUI()
         {
             base.OnGUI();
-            using (new EditorGUI.DisabledScope(m_Asset == null))
-            {
-                if (GUILayout.Button("Find"))
-                    FindSprites();
-            }
-            var count = m_MatNames != null ? m_MatNames.Length : 0;
-            EditorGUILayout.LabelField(string.Format("Count:{0}", count));
-            if (count > 0)
-            {
-                m_ScrollPos = EditorGUILayout.BeginScrollView(m_ScrollPos);
-                if (m_SelectedIdx >= m_MatNames.Length)
-                    m_SelectedIdx = 0;
-                m_SelectedIdx = GUILayout.SelectionGrid(m_SelectedIdx, m_MatNames, 1, EditorStyles.miniButton, GUILayout.ExpandHeight(false));
-                EditorGUILayout.EndScrollView();
-
-                SelectionUtil.Select(m_Mats[m_SelectedIdx]);
-            }
+            m_DisableFind = m_Asset == null;
         }
 
 
         private List<Image> m_Images = new List<Image>();
-        private void FindSprites()
+        protected override void DoFind()
         {
-            m_Mats.Clear();
+            m_Items.Clear();
             Finder.ForeachPrefabs((prefab, path) =>
             {
                 m_Images.Clear();
@@ -47,13 +27,12 @@ namespace litefeel.Finder.Editor
                     Debug.Log($"Sprite {path}, {GetName(img.sprite)}, {GetName(img.overrideSprite)}", img);
                     if (img.sprite == m_Asset || img.overrideSprite == m_Asset)
                     {
-                        m_Mats.Add(prefab);
+                        m_Items.Add(prefab);
                         break;
                     }
                 }
-            }, true);
-            FillMatNames(m_Mats, ref m_MatNames);
-            Debug.Log($"XXX {m_Mats.Count}");
+            }, true, GetSearchInFolders());
+            FillMatNames(m_Items);
         }
 
         private string GetName(Object obj)
@@ -62,17 +41,15 @@ namespace litefeel.Finder.Editor
             return null;
         }
 
-        private void FillMatNames(List<GameObject> mats, ref string[] matNames)
+        private void FillMatNames(List<GameObject> mats)
         {
-            if (matNames == null || matNames.Length != mats.Count)
-                matNames = new string[mats.Count];
-
+            m_ItemNames.Clear();
             for (var i = 0; i < mats.Count; i++)
             {
                 var path = AssetDatabase.GetAssetPath(mats[i]);
                 //if (!path.EndsWith(".mat"))
                 //    path += ".mat";
-                matNames[i] = path;
+                m_ItemNames.Add(path);
             }
         }
     }
