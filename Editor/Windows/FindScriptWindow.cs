@@ -14,7 +14,8 @@ namespace litefeel.Finder.Editor
         protected override void OnGUI()
         {
             base.OnGUI();
-            
+
+            m_Message = null;
             m_ScriptType = null;
             if (m_Asset != null)
             {
@@ -22,15 +23,11 @@ namespace litefeel.Finder.Editor
                 if (!typeof(Component).IsAssignableFrom(m_ScriptType))
                 {
                     m_ScriptType = null;
-                    EditorGUILayout.HelpBox("Script must be  inherit from UnityEngine.Component", MessageType.Warning, true);
+                    m_Message = "Script must be inherit from UnityEngine.Component";
                 }
             }
-            
-            using (new EditorGUI.DisabledScope(m_ScriptType == null))
-            {
-                if (GUILayout.Button("Find"))
-                    Find();
-            }
+            m_DisableFind = m_ScriptType == null;
+
             var count = m_AssetNames != null ? m_AssetNames.Length : 0;
             EditorGUILayout.LabelField(string.Format("Count:{0}", count));
             if (count > 0)
