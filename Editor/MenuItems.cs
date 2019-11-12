@@ -5,27 +5,27 @@ namespace litefeel.Finder.Editor
 {
     static class MenuItems
     {
-        [MenuItem("Assets/LiteFeel/Finder/FindMaterails")]
+        [MenuItem("Assets/Finder/FindMaterails")]
         static void FindMaterails()
         {
             ShowWindow<FindMaterialsWindow>();
         }
-        [MenuItem("Assets/LiteFeel/Finder/FindSprites")]
+        [MenuItem("Assets/Finder/FindSprites")]
         static void FindSprites()
         {
             ShowWindow<FindSpritesWindow>();
         }
-        [MenuItem("Assets/LiteFeel/Finder/FindTexts")]
+        [MenuItem("Assets/Finder/FindTexts")]
         static void FindTexts()
         {
             ShowWindow<FindTextsWindow>();
         }
-        [MenuItem("Assets/LiteFeel/Finder/FindFontInPrefab")]
+        [MenuItem("Assets/Finder/FindFontInPrefab")]
         static void FindFontInPrefab()
         {
             ShowWindow<FindFontInPrefabWindow>();
         }
-        [MenuItem("Assets/LiteFeel/Finder/FindScript")]
+        [MenuItem("Assets/Finder/FindScript")]
         static void FindScript()
         {
             ShowWindow<FindScriptWindow>();
