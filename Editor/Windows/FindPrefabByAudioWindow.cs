@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -22,13 +23,23 @@ namespace litefeel.Finder.Editor
             {
                 list.Clear();
                 prefab.GetComponentsInChildren(true, list);
-                if (list.Count > 0)
+                if (HasAsset(list))
                 {
                     m_Items.Add(prefab);
                     m_ItemNames.Add(AssetDatabase.GetAssetPath(prefab));
                 }
             }, true, GetSearchInFolders());
             m_SimpleTreeView.Reload();
+        }
+
+        private bool HasAsset(List<AudioSource> list)
+        {
+            foreach(var source in list)
+            {
+                if (source.clip == m_Asset)
+                    return true;
+            }
+            return false;
         }
 
         protected override void OnItemDoubleClick(int index)
@@ -38,11 +49,22 @@ namespace litefeel.Finder.Editor
 
         protected override void OnClickFindInScene()
         {
-            //var searchFilter = $"t:{m_ScriptType.FullName}";
-            //SearchableEditorWindowUtil.ForEach((win) =>
-            //{
-            //    win.SetSearchFilter(searchFilter, SearchableEditorWindow.SearchMode.All);
-            //}, HierarchyType.GameObjects);
+            string searchFilter;
+
+            // Don't remove "Assets" prefix, we need to support Packages as well (https://fogbugz.unity3d.com/f/cases/1161019/)
+            string path = AssetDatabase.GetAssetPath(m_Asset);
+            if (path.IndexOf(' ') != -1)
+                path = '"' + path + '"';
+
+            if (AssetDatabase.IsMainAsset(m_Asset))
+                searchFilter = "ref:" + path;
+            else
+                searchFilter = "ref:" + m_Asset.GetInstanceID() + ":" + path;
+
+            SearchableEditorWindowUtil.ForEach((win) =>
+            {
+                win.SetSearchFilter(searchFilter, SearchableEditorWindow.SearchMode.All);
+            }, HierarchyType.GameObjects);
         }
 
     }
