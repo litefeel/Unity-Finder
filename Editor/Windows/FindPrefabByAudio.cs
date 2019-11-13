@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace litefeel.Finder.Editor
 {
-    class FindPrefabByAudioWindow : FinderWindowBase<AudioClip, GameObject>
+    class FindPrefabByAudio : FinderWindowBase<AudioClip, GameObject>
     {
         protected override void ConfigValues()
         {

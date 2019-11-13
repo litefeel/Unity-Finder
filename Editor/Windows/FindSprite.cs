@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace litefeel.Finder.Editor
 {
-    class FindSpritesWindow : FinderWindowBase<Sprite, GameObject>
+    class FindSprite : FinderWindowBase<Sprite, GameObject>
     {
         protected override void OnGUI()
         {

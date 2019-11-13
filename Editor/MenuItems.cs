@@ -5,35 +5,35 @@ namespace litefeel.Finder.Editor
 {
     static class MenuItems
     {
-        [MenuItem("Assets/Finder/FindMaterails")]
-        static void FindMaterails()
+        [MenuItem("Assets/Finder/FindMaterialByShader")]
+        static void FindMaterialByShader()
         {
-            ShowWindow<FindMaterialsWindow>();
+            ShowWindow<FindMaterialByShader>();
         }
-        [MenuItem("Assets/Finder/FindSprites")]
-        static void FindSprites()
+        [MenuItem("Assets/Finder/FindSprite")]
+        static void FindSprite()
         {
-            ShowWindow<FindSpritesWindow>();
+            ShowWindow<FindSprite>();
         }
-        [MenuItem("Assets/Finder/FindTexts")]
-        static void FindTexts()
+        [MenuItem("Assets/Finder/FindText")]
+        static void FindText()
         {
-            ShowWindow<FindTextsWindow>();
+            ShowWindow<FindText>();
         }
         [MenuItem("Assets/Finder/FindFontInPrefab")]
         static void FindFontInPrefab()
         {
-            ShowWindow<FindFontInPrefabWindow>();
+            ShowWindow<FindFontInPrefab>();
         }
         [MenuItem("Assets/Finder/FindPrefabByScript")]
-        static void FindScript()
+        static void FindPrefabByScript()
         {
-            ShowWindow<FindPrefabByScriptWindow>();
+            ShowWindow<FindPrefabByScript>();
         }
         [MenuItem("Assets/Finder/FindPrefabByAudio")]
         static void FindPrefabByAudio()
         {
-            ShowWindow<FindPrefabByAudioWindow>();
+            ShowWindow<FindPrefabByAudio>();
         }
 
         private static void ShowWindow<T>(string title = null) where T : EditorWindow, IFinderWindow

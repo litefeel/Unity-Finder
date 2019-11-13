@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace litefeel.Finder.Editor
 {
-    class FindTextsWindow : FinderWindowBase<Font, GameObject>
+    class FindText : FinderWindowBase<Font, GameObject>
     {
 
         protected override void DoFind()

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace litefeel.Finder.Editor
 {
-    class FindMaterialsWindow : FinderWindowBase<Shader, Material>
+    class FindMaterialByShader : FinderWindowBase<Shader, Material>
     {
         protected override void ConfigValues()
         {

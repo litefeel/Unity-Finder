@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace litefeel.Finder.Editor
 {
-    class FindFontInPrefabWindow : FinderWindowBase<Font, Text>
+    class FindFontInPrefab : FinderWindowBase<Font, Text>
     {
         protected override void OnGUI()
         {
