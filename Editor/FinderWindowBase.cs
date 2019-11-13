@@ -27,6 +27,7 @@ namespace litefeel.Finder.Editor
         protected TreeViewState m_TreeViewState;
         protected SimpleTreeView m_SimpleTreeView;
         protected bool m_EnabledFindInScene;
+        protected SearchType m_SearchType;
 
         private string m_FilterStr;
 
@@ -62,6 +63,7 @@ namespace litefeel.Finder.Editor
                 if (GUILayout.Button("Find", options))
                     DoFind();
             }
+            m_SearchType = (SearchType)EditorGUILayout.EnumPopup(m_SearchType);
             if (!m_IgnoreSearchFolder)
                 OnGUISearchFolder();
             EditorGUILayout.EndHorizontal();

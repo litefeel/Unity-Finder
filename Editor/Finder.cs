@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityObject = UnityEngine.Object;
 
 namespace litefeel.Finder.Editor
 {
@@ -12,7 +14,7 @@ namespace litefeel.Finder.Editor
         private const string PACKAGE_DIR = "Packages/";
         private static MethodInfo s_FindBuiltin;
 
-        
+
         private static List<Material> s_TempMats = new List<Material>();
         private static void ForeachMats(Action<Material, string> action, bool showProgress = true, string[] searchInFolders = null)
         {
@@ -72,6 +74,50 @@ namespace litefeel.Finder.Editor
             {
                 EditorUtility.ClearProgressBar();
             }
+        }
+        public static void ForeachPrefabAndScene(Action<UnityObject, string> action, bool showProgress, string[] searchInFolders = null, SearchType searchType = SearchType.All)
+        {
+            string filter;
+            switch (searchType)
+            {
+                case SearchType.PrefabOnly: filter = "t:Prefab"; break;
+                case SearchType.SceneOnly: filter = "t:Scene"; break;
+                default: filter = "t:Prefab t:Scene"; break;
+            };
+            var guids = AssetDatabase.FindAssets(filter, searchInFolders);
+            var count = guids.Length;
+            if (showProgress)
+                EditorUtility.DisplayCancelableProgressBar("Progress Assets", $"0/{count}", 0);
+            try
+            {
+                for (var i = 0; i < count; i++)
+                {
+                    if (showProgress)
+                    {
+                        if (EditorUtility.DisplayCancelableProgressBar("Progress Assets", $"{i}/{count}", i / (float)count))
+                            break;
+                    }
+                    var path = AssetDatabase.GUIDToAssetPath(guids[i]);
+                    var go = AssetDatabase.LoadAssetAtPath<UnityObject>(path);
+                    action(go, path);
+                }
+            }
+            finally
+            {
+                EditorUtility.ClearProgressBar();
+            }
+        }
+
+        public static void ForeachRootGameObjectsInScene(Func<GameObject, bool> action, string scenePath)
+        {
+            var scene = EditorSceneManager.OpenScene(scenePath, OpenSceneMode.Additive);
+            if (scene == null) return;
+
+            foreach (var go in scene.GetRootGameObjects())
+            {
+                if (action.Invoke(go)) break;
+            }
+            EditorSceneManager.CloseScene(scene, true);
         }
 
         private static void LoadAssetsAtPath<T>(string path, List<T> list) where T : UnityEngine.Object
