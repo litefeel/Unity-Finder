@@ -47,13 +47,9 @@ namespace litefeel.Finder.Editor
             AssetDatabase.OpenAsset(m_Items[index]);
         }
 
-        protected override void OnClickFindInScene()
+        protected override string GetFindInSceneSearchFilter()
         {
-            var searchFilter = $"t:{m_ScriptType.FullName}";
-            SearchableEditorWindowUtil.ForEach((win) =>
-            {
-                win.SetSearchFilter(searchFilter, SearchableEditorWindow.SearchMode.All);
-            }, HierarchyType.GameObjects);
+            return $"t:{m_ScriptType.FullName}";
         }
 
     }

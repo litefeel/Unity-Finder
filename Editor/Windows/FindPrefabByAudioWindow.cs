@@ -10,6 +10,7 @@ namespace litefeel.Finder.Editor
         protected override void ConfigValues()
         {
             m_DisableFind = m_Asset == null;
+            m_EnabledFindInScene = m_Asset != null;
         }
 
         protected override void DoFind()
@@ -45,26 +46,6 @@ namespace litefeel.Finder.Editor
         protected override void OnItemDoubleClick(int index)
         {
             AssetDatabase.OpenAsset(m_Items[index]);
-        }
-
-        protected override void OnClickFindInScene()
-        {
-            string searchFilter;
-
-            // Don't remove "Assets" prefix, we need to support Packages as well (https://fogbugz.unity3d.com/f/cases/1161019/)
-            string path = AssetDatabase.GetAssetPath(m_Asset);
-            if (path.IndexOf(' ') != -1)
-                path = '"' + path + '"';
-
-            if (AssetDatabase.IsMainAsset(m_Asset))
-                searchFilter = "ref:" + path;
-            else
-                searchFilter = "ref:" + m_Asset.GetInstanceID() + ":" + path;
-
-            SearchableEditorWindowUtil.ForEach((win) =>
-            {
-                win.SetSearchFilter(searchFilter, SearchableEditorWindow.SearchMode.All);
-            }, HierarchyType.GameObjects);
         }
 
     }
