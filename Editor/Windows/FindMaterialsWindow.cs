@@ -6,10 +6,8 @@ namespace litefeel.Finder.Editor
 {
     class FindMaterialsWindow : FinderWindowBase<Shader, Material>
     {
-        protected override void OnGUI()
+        protected override void ConfigValues()
         {
-            base.OnGUI();
-
             m_DisableFind = m_Asset == null;
         }
 

@@ -26,6 +26,7 @@ namespace litefeel.Finder.Editor
 
         protected TreeViewState m_TreeViewState;
         protected SimpleTreeView m_SimpleTreeView;
+        protected bool m_EnabledFindInScene;
 
         public virtual void InitAsset(UnityObject obj)
         {
@@ -43,7 +44,12 @@ namespace litefeel.Finder.Editor
 
         protected virtual void OnGUI()
         {
+            EditorGUILayout.BeginHorizontal();
             m_Asset = EditorGUILayout.ObjectField("Asset", m_Asset, typeof(TAsset), false) as TAsset;
+            if(Event.current.type == EventType.Layout)
+                ConfigValues();
+            OnGUIFindInScene();
+            EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.BeginHorizontal();
             using (new EditorGUI.DisabledScope(m_DisableFind))
@@ -68,6 +74,19 @@ namespace litefeel.Finder.Editor
             var rect = GUILayoutUtility.GetRect(position.width, position.height);
             m_SimpleTreeView.OnGUI(rect);
         }
+
+        protected virtual void ConfigValues() { }
+
+        protected virtual void OnGUIFindInScene()
+        {
+            if (m_EnabledFindInScene)
+            {
+                if (GUILayout.Button("FindInScene", GUILayout.ExpandWidth(false)))
+                    OnClickFindInScene();
+            }
+        }
+
+        protected virtual void OnClickFindInScene() { }
 
         protected string[] GetSearchInFolders()
         {

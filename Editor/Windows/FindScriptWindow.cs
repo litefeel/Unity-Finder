@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using UnityEditor;
-using UnityEditor.IMGUI.Controls;
+﻿using UnityEditor;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace litefeel.Finder.Editor
 {
@@ -11,10 +7,8 @@ namespace litefeel.Finder.Editor
     {
         private System.Type m_ScriptType;
 
-        protected override void OnGUI()
+        protected override void ConfigValues()
         {
-            base.OnGUI();
-
             m_Message = null;
             m_ScriptType = null;
             if (m_Asset != null)
@@ -27,6 +21,7 @@ namespace litefeel.Finder.Editor
                 }
             }
             m_DisableFind = m_ScriptType == null;
+            m_EnabledFindInScene = m_ScriptType != null;
         }
 
         protected override void DoFind()
@@ -50,6 +45,15 @@ namespace litefeel.Finder.Editor
         protected override void OnItemDoubleClick(int index)
         {
             AssetDatabase.OpenAsset(m_Items[index]);
+        }
+
+        protected override void OnClickFindInScene()
+        {
+            var searchFilter = $"t:{m_ScriptType.FullName}";
+            SearchableEditorWindowUtil.ForEach((win) =>
+            {
+                win.SetSearchFilter(searchFilter, SearchableEditorWindow.SearchMode.All);
+            }, HierarchyType.GameObjects);
         }
 
     }

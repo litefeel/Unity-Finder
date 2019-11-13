@@ -7,12 +7,6 @@ namespace litefeel.Finder.Editor
 {
     class FindTextsWindow : FinderWindowBase<Font, GameObject>
     {
-        protected override void OnGUI()
-        {
-            base.OnGUI();
-            //selection = AssetDatabase.LoadAssetAtPath(selectedPath, typeof(DefaultAsset)) as DefaultAsset;
-            
-        }
 
         protected override void DoFind()
         {
