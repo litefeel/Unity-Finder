@@ -12,7 +12,6 @@ namespace litefeel.Finder.Editor
     {
         private const string ASSETS_DIR = "Assets/";
         private const string PACKAGE_DIR = "Packages/";
-        private static MethodInfo s_FindBuiltin;
 
 
         private static List<Material> s_TempMats = new List<Material>();
@@ -129,47 +128,6 @@ namespace litefeel.Finder.Editor
                     list.Add((T)asset);
             }
         }
-
-
-        private static Shader FindStandardShader()
-        {
-            var cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            var shader = cube.GetComponent<Renderer>().sharedMaterial.shader;
-            GameObject.DestroyImmediate(cube);
-            Debug.Log($"shader {shader.name}, {AssetDatabase.GetAssetPath(shader)}");
-            return shader;
-        }
-
-        private static Shader FindBuiltinShader(string shaderName)
-        {
-            if (s_FindBuiltin == null)
-                s_FindBuiltin = typeof(Shader).GetMethod("FindBuiltin", BindingFlags.NonPublic | BindingFlags.Static);
-
-            var shader = s_FindBuiltin.Invoke(null, new string[] { shaderName });
-            return shader as Shader;
-        }
-
-        [MenuItem("Window/LiteFeel/ShaderTools/FindStandard")]
-        private static void FindShaders()
-        {
-            var map = new Dictionary<Shader, Material>();
-            var shaderName = "Standard";
-            var count = 0;
-            ForeachMats((mat, matPath) =>
-            {
-                if (mat.shader.name == shaderName)
-                {
-                    map[mat.shader] = mat;
-                    count++;
-                }
-            });
-            Debug.Log("=================================");
-            Debug.Log(count);
-            foreach (var entry in map)
-                Debug.Log(entry.Value.name, entry.Value);
-        }
-
-
 
         internal static int FindMaterials(string shaderName, List<Material> mats, ShaderType shaderType)
         {
