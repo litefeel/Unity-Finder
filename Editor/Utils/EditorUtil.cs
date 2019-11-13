@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
-using static UnityEditor.SearchableEditorWindow;
 
 namespace litefeel.Finder.Editor
 {
