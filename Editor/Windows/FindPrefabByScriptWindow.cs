@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace litefeel.Finder.Editor
 {
-    class FindScriptWindow : FinderWindowBase<MonoScript, GameObject>
+    class FindPrefabByScriptWindow : FinderWindowBase<MonoScript, GameObject>
     {
         private System.Type m_ScriptType;
 
