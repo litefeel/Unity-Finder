@@ -109,6 +109,7 @@ namespace litefeel.Finder.Editor
 
         public static void ForeachRootGameObjectsInScene(Func<GameObject, bool> action, string scenePath)
         {
+            var sceneCount = EditorSceneManager.sceneCount;
             var scene = EditorSceneManager.OpenScene(scenePath, OpenSceneMode.Additive);
             if (scene == null) return;
 
@@ -116,7 +117,8 @@ namespace litefeel.Finder.Editor
             {
                 if (action.Invoke(go)) break;
             }
-            EditorSceneManager.CloseScene(scene, true);
+            if (EditorSceneManager.sceneCount > sceneCount)
+                EditorSceneManager.CloseScene(scene, true);
         }
 
         private static void LoadAssetsAtPath<T>(string path, List<T> list) where T : UnityEngine.Object
