@@ -9,7 +9,7 @@ namespace litefeel.Finder.Editor
 {
     class SimpleTreeView : TreeView
     {
-        
+
         private TreeViewItem m_Root = new TreeViewItem(-1, -1, "Root");
         private List<TreeViewItem> m_TreeItems = new List<TreeViewItem>();
 
@@ -17,6 +17,8 @@ namespace litefeel.Finder.Editor
         public Action<int> onItemDoubleClick;
 
         private List<string> m_Items = new List<string>();
+        private string m_FilterStr;
+
         public List<string> Items
         {
             get { return m_Items; }
@@ -27,6 +29,16 @@ namespace litefeel.Finder.Editor
         public SimpleTreeView(TreeViewState treeViewState)
         : base(treeViewState)
         {
+            Reload();
+        }
+
+        public void SetFilter(string filterStr)
+        {
+            m_FilterStr = filterStr;
+            if (string.IsNullOrWhiteSpace(m_FilterStr))
+                m_FilterStr = null;
+            else
+                m_FilterStr = m_FilterStr.ToLower();
             Reload();
         }
 
@@ -41,7 +53,8 @@ namespace litefeel.Finder.Editor
             m_TreeItems.Clear();
             for (var i = 0; i < m_Items.Count; i++)
             {
-                m_TreeItems.Add(new TreeViewItem(i, 0, m_Items[i]));
+                if (m_FilterStr == null || m_Items[i].ToLower().Contains(m_FilterStr))
+                    m_TreeItems.Add(new TreeViewItem(i, 0, m_Items[i]));
             }
             // Utility method that initializes the TreeViewItem.children and .parent for all items.
             SetupParentsAndChildrenFromDepths(m_Root, m_TreeItems);

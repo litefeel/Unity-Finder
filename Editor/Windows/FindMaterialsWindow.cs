@@ -28,7 +28,7 @@ namespace litefeel.Finder.Editor
             {
                 var path = AssetDatabase.GetAssetPath(mats[i]);
                 if (!path.EndsWith(".mat"))
-                    path += ".mat";
+                    path += $"/{mats[i].name}.mat";
                 m_ItemNames.Add(path);
             }
         }

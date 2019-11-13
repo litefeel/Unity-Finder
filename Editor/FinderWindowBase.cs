@@ -28,6 +28,8 @@ namespace litefeel.Finder.Editor
         protected SimpleTreeView m_SimpleTreeView;
         protected bool m_EnabledFindInScene;
 
+        private string m_FilterStr;
+
         public virtual void InitAsset(UnityObject obj)
         {
             m_Asset = obj as TAsset;
@@ -46,7 +48,7 @@ namespace litefeel.Finder.Editor
         {
             EditorGUILayout.BeginHorizontal();
             m_Asset = EditorGUILayout.ObjectField("Asset", m_Asset, typeof(TAsset), false) as TAsset;
-            if(Event.current.type == EventType.Layout)
+            if (Event.current.type == EventType.Layout)
                 ConfigValues();
             OnGUIFindInScene();
             EditorGUILayout.EndHorizontal();
@@ -54,7 +56,6 @@ namespace litefeel.Finder.Editor
             EditorGUILayout.BeginHorizontal();
             using (new EditorGUI.DisabledScope(m_DisableFind))
             {
-
                 GUILayoutOption[] options = null;
                 if (!m_IgnoreSearchFolder)
                     options = new GUILayoutOption[] { GUILayout.Width(EditorGUIUtility.labelWidth) };
@@ -68,7 +69,19 @@ namespace litefeel.Finder.Editor
             if (!string.IsNullOrEmpty(m_Message))
                 EditorGUILayout.HelpBox(m_Message, MessageType.Warning, true);
 
+            EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField(string.Format("Count:{0}", m_ItemNames.Count));
+            using (new EditorGUI.DisabledScope(m_ItemNames.Count == 0))
+            {
+                EditorGUILayout.LabelField("Filter:", GUILayout.Width(EditorUtil.CalcLabelSize("Filter:")));
+                var tmpStr = EditorGUILayout.TextField(m_FilterStr);
+                if (tmpStr != m_FilterStr)
+                {
+                    m_FilterStr = tmpStr;
+                    m_SimpleTreeView.SetFilter(m_FilterStr);
+                }
+            }
+            EditorGUILayout.EndHorizontal();
 
             m_SimpleTreeView.Items = m_ItemNames;
             var rect = GUILayoutUtility.GetRect(position.width, position.height);
