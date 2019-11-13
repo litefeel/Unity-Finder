@@ -30,6 +30,11 @@ namespace litefeel.Finder.Editor
         {
             ShowWindow<FindScriptWindow>();
         }
+        [MenuItem("Assets/Finder/FindPrefabByAudio")]
+        static void FindPrefabByAudio()
+        {
+            ShowWindow<FindPrefabByAudioWindow>();
+        }
 
         private static void ShowWindow<T>(string title = null) where T : EditorWindow, IFinderWindow
         {
