@@ -22,6 +22,11 @@ namespace litefeel.Finder.Editor
             FillMatNames(m_Items);
         }
 
+        protected override bool InGameObject(GameObject prefab, Font m_Asset)
+        {
+            throw new System.NotImplementedException();
+        }
+
         private void FillMatNames(List<GameObject> mats)
         {
             m_ItemNames.Clear();

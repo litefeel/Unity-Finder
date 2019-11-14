@@ -47,5 +47,15 @@ namespace litefeel.Finder.Editor
             }
             return false;
         }
+
+        public static bool InGameObject(GameObject go, AudioClip clip)
+        {
+            foreach (var source in go.GetComponentsInChildren<AudioSource>())
+            {
+                if (source.clip == clip)
+                    return true;
+            }
+            return false;
+        }
     }
 }

@@ -24,47 +24,9 @@ namespace litefeel.Finder.Editor
             m_EnabledFindInScene = m_ScriptType != null;
         }
 
-        protected override void DoFind()
+        protected override bool InGameObject(GameObject prefab, MonoScript m_Asset)
         {
-            base.DoFind();
-
-            m_Items.Clear();
-            m_ItemNames.Clear();
-            Finder.ForeachPrefabAndScene((obj, path) =>
-            {
-                bool has = false;
-                switch (obj)
-                {
-                    case SceneAsset _:
-                        has = InScene(path);
-                        break;
-                    case GameObject prefab:
-                        has = prefab.GetComponentInChildren(m_ScriptType, true);
-                        break;
-                }
-                if (has)
-                {
-                    m_Items.Add(obj);
-                    m_ItemNames.Add(path);
-                }
-            }, true, GetSearchInFolders(), m_SearchType);
-            m_SimpleTreeView.Reload();
-        }
-
-
-        private bool InScene(string scenePath)
-        {
-            bool has = false;
-            Finder.ForeachRootGameObjectsInScene((go) =>
-            {
-                if (go.GetComponentInChildren(m_ScriptType, true))
-                {
-                    has = true;
-                    return true;
-                }
-                return false;
-            }, scenePath);
-            return has;
+            return prefab.GetComponentInChildren(m_ScriptType, true);
         }
 
         protected override void OnItemDoubleClick(int index)

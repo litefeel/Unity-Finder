@@ -46,6 +46,11 @@ namespace litefeel.Finder.Editor
                 m_ItemNames.Add(mats[i].name);
             }
         }
+
+        protected override bool InGameObject(GameObject prefab, Font m_Asset)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
 

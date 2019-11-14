@@ -1,46 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 
 namespace litefeel.Finder.Editor
 {
-    class FindPrefabByAudio : FinderWindowBase<AudioClip, GameObject>
+    class FindPrefabByAudio : FinderWindowBase<AudioClip, UnityEngine.Object>
     {
+
         protected override void ConfigValues()
         {
             m_DisableFind = m_Asset == null;
             m_EnabledFindInScene = m_Asset != null;
         }
 
-        protected override void DoFind()
+        protected override bool InGameObject(GameObject prefab, AudioClip m_Asset)
         {
-            base.DoFind();
-
-            m_Items.Clear();
-            m_ItemNames.Clear();
-            var list = new List<AudioSource>();
-            Finder.ForeachPrefabs((prefab, path) =>
-            {
-                list.Clear();
-                prefab.GetComponentsInChildren(true, list);
-                if (HasAsset(list))
-                {
-                    m_Items.Add(prefab);
-                    m_ItemNames.Add(AssetDatabase.GetAssetPath(prefab));
-                }
-            }, true, GetSearchInFolders());
-            m_SimpleTreeView.Reload();
-        }
-
-        private bool HasAsset(List<AudioSource> list)
-        {
-            foreach(var source in list)
-            {
-                if (source.clip == m_Asset)
-                    return true;
-            }
-            return false;
+            return FindUtil.InGameObject(prefab, m_Asset);
         }
 
         protected override void OnItemDoubleClick(int index)

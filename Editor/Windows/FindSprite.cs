@@ -52,6 +52,11 @@ namespace litefeel.Finder.Editor
                 m_ItemNames.Add(path);
             }
         }
+
+        protected override bool InGameObject(GameObject prefab, Sprite m_Asset)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
 

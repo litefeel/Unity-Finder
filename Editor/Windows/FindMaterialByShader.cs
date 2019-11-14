@@ -13,7 +13,6 @@ namespace litefeel.Finder.Editor
 
         protected override void DoFind()
         {
-            base.DoFind();
             m_Items.Clear();
             Finder.FindMaterials(m_Asset, m_Items, GetSearchInFolders());
             FillMatNames(m_Items);
@@ -32,6 +31,11 @@ namespace litefeel.Finder.Editor
                 m_ItemNames.Add(path);
             }
         }
+        protected override bool InGameObject(GameObject prefab, Shader m_Asset)
+        {
+            throw new System.NotImplementedException();
+        }
+
     }
 }
 

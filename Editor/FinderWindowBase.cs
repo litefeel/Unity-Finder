@@ -171,7 +171,32 @@ namespace litefeel.Finder.Editor
                 m_Folder = EditorGUILayout.ObjectField(m_Folder, typeof(DefaultAsset), false, GUILayout.ExpandWidth(true)) as DefaultAsset;
         }
 
-        protected virtual void DoFind() { }
+        protected virtual void DoFind()
+        {
+            m_Items.Clear();
+            m_ItemNames.Clear();
+            Finder.ForeachPrefabAndScene((obj, path) =>
+            {
+                bool has = false;
+                switch (obj)
+                {
+                    case SceneAsset _:
+                        has = FindUtil.InScene(path, m_Asset, InGameObject);
+                        break;
+                    case GameObject prefab:
+                        has = InGameObject(prefab, m_Asset);
+                        break;
+                }
+                if (has)
+                {
+                    m_Items.Add((TObject)obj);
+                    m_ItemNames.Add(path);
+                }
+            }, true, GetSearchInFolders(), m_SearchType);
+            m_SimpleTreeView.Reload();
+        }
+
+        protected abstract bool InGameObject(GameObject prefab, TAsset m_Asset);
 
         protected virtual void OnItemSelect(int index)
         {
