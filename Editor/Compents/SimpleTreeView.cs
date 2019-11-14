@@ -14,6 +14,7 @@ namespace litefeel.Finder.Editor
         private List<TreeViewItem> m_TreeItems = new List<TreeViewItem>();
 
         public Action<int> onItemSelect;
+        public Action<int> onItemClick;
         public Action<int> onItemDoubleClick;
 
         private List<string> m_Items = new List<string>();
@@ -71,6 +72,11 @@ namespace litefeel.Finder.Editor
         protected override void DoubleClickedItem(int id)
         {
             onItemDoubleClick?.Invoke(id);
+        }
+
+        protected override void SingleClickedItem(int id)
+        {
+            onItemClick?.Invoke(id);
         }
 
         protected override void SelectionChanged(IList<int> selectedIds)

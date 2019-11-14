@@ -42,6 +42,7 @@ namespace litefeel.Finder.Editor
                 m_TreeViewState = new TreeViewState();
             m_SimpleTreeView = new SimpleTreeView(m_TreeViewState);
             m_SimpleTreeView.onItemSelect = OnItemSelect;
+            m_SimpleTreeView.onItemClick = OnItemClick;
             m_SimpleTreeView.onItemDoubleClick = OnItemDoubleClick;
         }
 
@@ -153,7 +154,13 @@ namespace litefeel.Finder.Editor
 
         protected virtual void OnItemSelect(int index)
         {
-            SelectionUtil.Select(m_Items[index]);
+            //SelectionUtil.Select(m_Items[index]);
+            EditorGUIUtility.PingObject(m_Items[index]);
+        }
+
+        protected virtual void OnItemClick(int index)
+        {
+            EditorGUIUtility.PingObject(m_Items[index]);
         }
 
         protected virtual void OnItemDoubleClick(int index) { }
