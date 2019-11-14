@@ -18,7 +18,7 @@ namespace litefeel.Finder.Editor
 
         protected bool m_IgnoreSearchFolder;
         protected int m_FolderIdx;
-        protected string[] m_FolderOptions = new string[] { "Assets", "Folder" };
+        protected string[] m_FolderOptions = new string[] { "All Assets  ", "Selection   " };
         protected DefaultAsset m_Folder;
 
         protected List<string> m_ItemNames = new List<string>();
@@ -31,6 +31,8 @@ namespace litefeel.Finder.Editor
 
         private string m_FilterStr;
 
+        private GUIStyle m_PopupStyle;
+
         public virtual void InitAsset(UnityObject obj)
         {
             m_Asset = obj as TAsset;
@@ -38,6 +40,12 @@ namespace litefeel.Finder.Editor
 
         protected virtual void OnEnable()
         {
+            m_PopupStyle = new GUIStyle(EditorStyles.popup);
+            m_PopupStyle.fixedHeight = EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing * 2;
+
+
+
+
             if (m_TreeViewState == null)
                 m_TreeViewState = new TreeViewState();
             m_SimpleTreeView = new SimpleTreeView(m_TreeViewState);
@@ -49,24 +57,30 @@ namespace litefeel.Finder.Editor
         protected virtual void OnGUI()
         {
             EditorGUILayout.BeginHorizontal();
-            m_Asset = EditorGUILayout.ObjectField("Asset", m_Asset, typeof(TAsset), false) as TAsset;
-            if (Event.current.type == EventType.Layout)
-                ConfigValues();
-            OnGUIFindInScene();
+            {
+                m_Asset = EditorGUILayout.ObjectField(m_Asset, typeof(TAsset), false) as TAsset;
+                if (Event.current.type == EventType.Layout)
+                    ConfigValues();
+                OnGUIFindInScene();
+            }
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.BeginHorizontal();
-            using (new EditorGUI.DisabledScope(m_DisableFind))
             {
-                GUILayoutOption[] options = null;
+                using (new EditorGUI.DisabledScope(m_DisableFind))
+                {
+                    GUILayoutOption[] options = null;
+                    if (!m_IgnoreSearchFolder)
+                        options = new GUILayoutOption[] { GUILayout.Width(EditorGUIUtility.labelWidth) };
+                    if (GUILayout.Button("Find", options))
+                        DoFind();
+                }
+                var width = EditorUtil.CalcLabelSize(SearchType.SceneOnly.ToString()) + 30;
+
+                m_SearchType = (SearchType)EditorGUILayout.EnumPopup(m_SearchType, m_PopupStyle, GUILayout.Width(width));
                 if (!m_IgnoreSearchFolder)
-                    options = new GUILayoutOption[] { GUILayout.Width(EditorGUIUtility.labelWidth) };
-                if (GUILayout.Button("Find", options))
-                    DoFind();
+                    OnGUISearchFolder();
             }
-            m_SearchType = (SearchType)EditorGUILayout.EnumPopup(m_SearchType);
-            if (!m_IgnoreSearchFolder)
-                OnGUISearchFolder();
             EditorGUILayout.EndHorizontal();
 
             if (!string.IsNullOrEmpty(m_Message))
@@ -86,9 +100,18 @@ namespace litefeel.Finder.Editor
             }
             EditorGUILayout.EndHorizontal();
 
-            m_SimpleTreeView.Items = m_ItemNames;
-            var rect = GUILayoutUtility.GetRect(position.width, position.height);
-            m_SimpleTreeView.OnGUI(rect);
+            var rect = new Rect(2, 0, position.width - 4, position.height);
+            rect.y = (EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing * 2) * 3;
+            rect.height -= rect.y + EditorGUIUtility.standardVerticalSpacing;
+            GUILayout.BeginArea(rect, EditorStyles.textField);
+            {
+                m_SimpleTreeView.Items = m_ItemNames;
+                rect.position = new Vector2(0, 0);
+                m_SimpleTreeView.OnGUI(rect);
+                if (m_ItemNames.Count == 0)
+                    EditorGUILayout.LabelField("No References");
+            }
+            GUILayout.EndArea();
         }
 
         protected virtual void ConfigValues() { }
@@ -143,8 +166,6 @@ namespace litefeel.Finder.Editor
 
         protected virtual void OnGUISearchFolder()
         {
-            EditorGUILayout.LabelField(" Find From ", GUILayout.Width(70));
-
             m_FolderIdx = GUILayout.SelectionGrid(m_FolderIdx, m_FolderOptions, 2, EditorStyles.radioButton, GUILayout.ExpandWidth(false));
             using (new EditorGUI.DisabledScope(m_FolderIdx == 0))
                 m_Folder = EditorGUILayout.ObjectField(m_Folder, typeof(DefaultAsset), false, GUILayout.ExpandWidth(true)) as DefaultAsset;
@@ -154,7 +175,6 @@ namespace litefeel.Finder.Editor
 
         protected virtual void OnItemSelect(int index)
         {
-            //SelectionUtil.Select(m_Items[index]);
             EditorGUIUtility.PingObject(m_Items[index]);
         }
 
