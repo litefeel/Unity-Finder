@@ -15,7 +15,7 @@ namespace litefeel.Finder.Editor
 
 
         private static List<Material> s_TempMats = new List<Material>();
-        private static void ForeachMats(Action<Material, string> action, bool showProgress = true, string[] searchInFolders = null)
+        public static void ForeachMats(Action<Material, string> action, bool showProgress = true, string[] searchInFolders = null)
         {
 
             var guids = AssetDatabase.FindAssets("t:Material", searchInFolders);
