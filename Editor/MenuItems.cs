@@ -15,6 +15,11 @@ namespace litefeel.Finder.Editor
         {
             ShowWindow<FindPrefabByShader>();
         }
+        [MenuItem("Assets/Finder/FindPrefabByMaterial")]
+        static void FindPrefabByMaterial()
+        {
+            ShowWindow<FindPrefabByMaterial>();
+        }
         [MenuItem("Assets/Finder/FindSprite")]
         static void FindSprite()
         {
