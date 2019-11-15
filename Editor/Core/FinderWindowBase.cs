@@ -20,7 +20,10 @@ namespace litefeel.Finder.Editor
         protected List<string> m_ItemNames = new List<string>();
         protected List<TObject> m_Items = new List<TObject>();
 
+
+        [SerializeField]
         protected TreeViewState m_TreeViewState;
+        [SerializeField]
         protected SimpleTreeView m_SimpleTreeView;
         protected bool m_EnabledFindInScene;
         protected SearchType m_SearchType;
@@ -28,12 +31,22 @@ namespace litefeel.Finder.Editor
         private string m_FilterStr;
 
         private GUIStyle m_PopupStyle;
+        private GUIStyle PopupStyle
+        {
+            get
+            {
+                if(m_PopupStyle == null)
+                {
+                    m_PopupStyle = new GUIStyle(EditorStyles.popup);
+                    m_PopupStyle.fixedHeight = EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing * 2;
+                }
+                return m_PopupStyle;
+            }
+        }
 
         protected virtual void OnEnable()
         {
-            m_PopupStyle = new GUIStyle(EditorStyles.popup);
-            m_PopupStyle.fixedHeight = EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing * 2;
-
+            
 
             if (m_TreeViewState == null)
                 m_TreeViewState = new TreeViewState();
@@ -41,6 +54,8 @@ namespace litefeel.Finder.Editor
             m_SimpleTreeView.onItemSelect = OnItemSelect;
             m_SimpleTreeView.onItemClick = OnItemClick;
             m_SimpleTreeView.onItemDoubleClick = OnItemDoubleClick;
+            m_SimpleTreeView.Items = m_ItemNames;
+            m_SimpleTreeView.Reload();
         }
 
         protected virtual void OnGUI()
@@ -60,7 +75,7 @@ namespace litefeel.Finder.Editor
                 }
                 var width = EditorUtil.CalcLabelSize(SearchType.SceneOnly.ToString()) + 30;
 
-                m_SearchType = (SearchType)EditorGUILayout.EnumPopup(m_SearchType, m_PopupStyle, GUILayout.Width(width));
+                m_SearchType = (SearchType)EditorGUILayout.EnumPopup(m_SearchType, PopupStyle, GUILayout.Width(width));
                 if (!m_IgnoreSearchFolder)
                     OnGUISearchFolder();
             }
