@@ -15,15 +15,16 @@ namespace litefeel.Finder.Editor
             m_Items.Clear();
             m_ItemNames.Clear();
             bool has = false;
-            var activeObject = Selection.activeObject;
-            if(activeObject != null && EditorUtility.IsPersistent(activeObject))
+            foreach (var obj in Selection.objects)
             {
-                var path = AssetDatabase.GetAssetPath(activeObject);
+                if (!EditorUtility.IsPersistent(obj)) continue;
+
+                var path = AssetDatabase.GetAssetPath(obj);
                 var ext = System.IO.Path.GetExtension(path);
-                switch(ext)
+                switch (ext)
                 {
                     case ".prefab":
-                        has = InGameObject((GameObject)activeObject);
+                        has = InGameObject((GameObject)obj);
                         break;
                     case ".unity":
                         has = FindUtil.InScene(path, InGameObject);
@@ -31,7 +32,7 @@ namespace litefeel.Finder.Editor
                 }
                 if (has)
                 {
-                    m_Items.Add(activeObject);
+                    m_Items.Add(obj);
                     m_ItemNames.Add(path);
                 }
             }
