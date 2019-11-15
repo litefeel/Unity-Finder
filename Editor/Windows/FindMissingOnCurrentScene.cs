@@ -8,7 +8,7 @@ using UnityObject = UnityEngine.Object;
 
 namespace litefeel.Finder.Editor
 {
-    class FindMissingOnSelection : FindWindowBase<UnityObject>
+    class FindMissingOnCurrentScene : FindWindowBase<UnityObject>
     {
         protected override void DoFind()
         {

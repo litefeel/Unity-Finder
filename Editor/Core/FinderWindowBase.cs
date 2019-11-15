@@ -14,7 +14,7 @@ namespace litefeel.Finder.Editor
 
         protected bool m_IgnoreSearchFolder;
         protected int m_FolderIdx;
-        protected string[] m_FolderOptions = new string[] { "All Assets  ", "Selection   " };
+        protected string[] m_FolderOptions = new string[] { "All Assets", "Folder" };
         protected DefaultAsset m_Folder;
 
         protected List<string> m_ItemNames = new List<string>();
