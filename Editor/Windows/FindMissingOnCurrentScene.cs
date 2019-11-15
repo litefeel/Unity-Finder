@@ -10,82 +10,57 @@ using UnityObject = UnityEngine.Object;
 
 namespace litefeel.Finder.Editor
 {
-    class FindMissingOnCurrentScene : FindWindowBase<UnityObject>
+    class FindMissingOnCurrentScene : FindWindowBase<Transform>
     {
         protected override void DoFind()
         {
             m_Items.Clear();
             m_ItemNames.Clear();
 
-            var list = new List<Transform>();
             var stage = PrefabStageUtility.GetCurrentPrefabStage();
-            if(stage != null)
+            if (stage != null)
             {
-                ForeachTransform(stage.prefabContentsRoot.transform, list);
-            }else
+                ForeachTransform(stage.prefabContentsRoot.transform, m_Items);
+            }
+            else
             {
                 var count = EditorSceneManager.loadedSceneCount;
                 for (var i = 0; i < count; i++)
                 {
+                    var gos = ListPool<GameObject>.Get();
                     var scene = EditorSceneManager.GetSceneAt(i);
-                    foreach(var go in scene.GetRootGameObjects())
+                    scene.GetRootGameObjects(gos);
+                    foreach (var go in gos)
                     {
-                        ForeachTransform(go.transform, list);
+                        ForeachTransform(go.transform, m_Items);
                     }
+                    ListPool<GameObject>.Release(gos);
                 }
-                
             }
 
-            bool has = false;
-            var activeObject = Selection.activeObject;
-            if(activeObject != null && EditorUtility.IsPersistent(activeObject))
+            foreach (var item in m_Items)
             {
-                var path = AssetDatabase.GetAssetPath(activeObject);
-                var ext = System.IO.Path.GetExtension(path);
-                switch(ext)
-                {
-                    case ".prefab":
-                        has = InGameObject((GameObject)activeObject);
-                        break;
-                    case ".unity":
-                        has = FindUtil.InScene(path, InGameObject);
-                        break;
-                }
-                if (has)
-                {
-                    m_Items.Add(activeObject);
-                    m_ItemNames.Add(path);
-                }
+                m_ItemNames.Add(UnityUtil.GetFullPath(item));
             }
-            
+
             m_SimpleTreeView.Reload();
         }
-        protected override bool InGameObject(GameObject prefab)
-        {
-            var comps = prefab.GetComponentsInChildren<Component>(true);
-            for(var i = 0; i < comps.Length; i++)
-            {
-                if (comps[i] == null)
-                    return true;
-            }
-            return false;
-        }
 
-        protected override void OnItemDoubleClick(int index)
-        {
-            AssetDatabase.OpenAsset(m_Items[index]);
-        }
+        protected override bool InGameObject(GameObject prefab) { return false; }
 
         private void ForeachTransform(Transform trans, List<Transform> list)
         {
-            foreach(var t in trans.gameObject.GetComponents<Component>())
+            var comps = ListPool<Component>.Get();
+            trans.GetComponents(comps);
+            foreach (var comp in comps)
             {
-                if(t == null)
+                if (comp == null)
                 {
                     list.Add(trans);
                     break;
                 }
             }
+            ListPool<Component>.Release(comps);
             var count = trans.childCount;
             for (var i = 0; i < count; i++)
                 ForeachTransform(trans.GetChild(i), list);
