@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace litefeel.Finder.Editor
 {
-    class FindPrefabByAudio : FinderWindowBase<AudioClip, UnityEngine.Object>
+    class FindPrefabByAudio : FindAssetWindowBase<AudioClip, UnityEngine.Object>
     {
 
         protected override void ConfigValues()
@@ -12,7 +12,7 @@ namespace litefeel.Finder.Editor
             m_EnabledFindInScene = m_Asset != null;
         }
 
-        protected override bool InGameObject(GameObject prefab, AudioClip m_Asset)
+        protected override bool InGameObject(GameObject prefab)
         {
             return FindUtil.InGameObject(prefab, m_Asset);
         }

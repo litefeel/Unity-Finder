@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace litefeel.Finder.Editor
 {
-    class FindText : FinderWindowBase<Font, GameObject>
+    class FindText : FindAssetWindowBase<Font, GameObject>
     {
 
         protected override void DoFind()
@@ -22,7 +22,7 @@ namespace litefeel.Finder.Editor
             FillMatNames(m_Items);
         }
 
-        protected override bool InGameObject(GameObject prefab, Font m_Asset)
+        protected override bool InGameObject(GameObject prefab)
         {
             throw new System.NotImplementedException();
         }

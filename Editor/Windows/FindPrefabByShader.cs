@@ -2,7 +2,7 @@
 
 namespace litefeel.Finder.Editor
 {
-    class FindPrefabByShader : FinderWindowBase<Shader, UnityEngine.Object>
+    class FindPrefabByShader : FindAssetWindowBase<Shader, UnityEngine.Object>
     {
         protected override void ConfigValues()
         {
@@ -10,9 +10,9 @@ namespace litefeel.Finder.Editor
             m_EnabledFindInScene = m_Asset != null;
         }
 
-        protected override bool InGameObject(GameObject prefab, Shader asset)
+        protected override bool InGameObject(GameObject prefab)
         {
-            return FindUtil.InGameObject(prefab, asset);
+            return FindUtil.InGameObject(prefab, m_Asset);
         }
 
     }

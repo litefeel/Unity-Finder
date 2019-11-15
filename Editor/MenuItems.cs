@@ -5,7 +5,11 @@ namespace litefeel.Finder.Editor
 {
     static class MenuItems
     {
-
+        [MenuItem("Assets/Finder/Find Missing - Current Selection", priority = 0)]
+        static void FindMissingOnSelection()
+        {
+            ShowWindow(typeof(FindMissingOnSelection));
+        }
         [MenuItem("Assets/Finder/Find Prefabs By Shader", priority = 100)]
         static void FindPrefabByShader()
         {
@@ -61,6 +65,17 @@ namespace litefeel.Finder.Editor
             }
             var window = EditorWindow.GetWindow<T>();
             window.InitAsset(Selection.activeObject);
+            window.titleContent = new UnityEngine.GUIContent(title);
+            window.Show();
+        }
+
+        private static void ShowWindow(System.Type winType, string title = null)
+        {
+            if (string.IsNullOrEmpty(title))
+            {
+                title = winType.Name;
+            }
+            var window = EditorWindow.GetWindow(winType);
             window.titleContent = new UnityEngine.GUIContent(title);
             window.Show();
         }

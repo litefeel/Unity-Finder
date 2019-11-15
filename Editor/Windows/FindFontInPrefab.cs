@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace litefeel.Finder.Editor
 {
-    class FindFontInPrefab : FinderWindowBase<Font, Text>
+    class FindFontInPrefab : FindAssetWindowBase<Font, Text>
     {
         protected override void OnGUI()
         {
@@ -47,7 +47,7 @@ namespace litefeel.Finder.Editor
             }
         }
 
-        protected override bool InGameObject(GameObject prefab, Font m_Asset)
+        protected override bool InGameObject(GameObject prefab)
         {
             throw new System.NotImplementedException();
         }

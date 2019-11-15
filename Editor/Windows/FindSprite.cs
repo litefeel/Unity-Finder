@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace litefeel.Finder.Editor
 {
-    class FindSprite : FinderWindowBase<Sprite, GameObject>
+    class FindSprite : FindAssetWindowBase<Sprite, GameObject>
     {
         protected override void OnGUI()
         {
@@ -53,7 +53,7 @@ namespace litefeel.Finder.Editor
             }
         }
 
-        protected override bool InGameObject(GameObject prefab, Sprite m_Asset)
+        protected override bool InGameObject(GameObject prefab)
         {
             throw new System.NotImplementedException();
         }

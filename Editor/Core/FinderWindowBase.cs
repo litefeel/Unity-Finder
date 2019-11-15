@@ -7,12 +7,8 @@ using UnityObject = UnityEngine.Object;
 
 namespace litefeel.Finder.Editor
 {
-    abstract class FinderWindowBase<TAsset, TObject> : EditorWindow, IFinderWindow
-        where TAsset : UnityObject
-        where TObject : UnityObject
+    abstract class FindWindowBase<TObject> : EditorWindow where TObject : UnityObject
     {
-        protected TAsset m_Asset;
-
         protected bool m_DisableFind;
         protected string m_Message;
 
@@ -33,17 +29,10 @@ namespace litefeel.Finder.Editor
 
         private GUIStyle m_PopupStyle;
 
-        public virtual void InitAsset(UnityObject obj)
-        {
-            m_Asset = obj as TAsset;
-        }
-
         protected virtual void OnEnable()
         {
             m_PopupStyle = new GUIStyle(EditorStyles.popup);
             m_PopupStyle.fixedHeight = EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing * 2;
-
-
 
 
             if (m_TreeViewState == null)
@@ -56,14 +45,8 @@ namespace litefeel.Finder.Editor
 
         protected virtual void OnGUI()
         {
-            EditorGUILayout.BeginHorizontal();
-            {
-                m_Asset = EditorGUILayout.ObjectField(m_Asset, typeof(TAsset), false) as TAsset;
-                if (Event.current.type == EventType.Layout)
-                    ConfigValues();
-                OnGUIFindInScene();
-            }
-            EditorGUILayout.EndHorizontal();
+            if (Event.current.type == EventType.Layout)
+                ConfigValues();
 
             EditorGUILayout.BeginHorizontal();
             {
@@ -116,46 +99,6 @@ namespace litefeel.Finder.Editor
 
         protected virtual void ConfigValues() { }
 
-        protected virtual void OnGUIFindInScene()
-        {
-            if (m_EnabledFindInScene)
-            {
-                if (GUILayout.Button("FindInScene", GUILayout.ExpandWidth(false)))
-                    OnClickFindInScene();
-            }
-        }
-
-        protected virtual string GetFindInSceneSearchFilter()
-        {
-            string searchFilter;
-
-#if UNITY_2019_2_OR_NEWER
-            // Don't remove "Assets" prefix, we need to support Packages as well (https://fogbugz.unity3d.com/f/cases/1161019/)
-            string path = AssetDatabase.GetAssetPath(m_Asset);
-#else
-            // only main assets have unique paths (remove "Assets" to make string simpler)
-            string path = AssetDatabase.GetAssetPath(m_Asset).Substring(7);
-#endif
-            if (path.IndexOf(' ') != -1)
-                path = '"' + path + '"';
-
-            if (AssetDatabase.IsMainAsset(m_Asset))
-                searchFilter = "ref:" + path;
-            else
-                searchFilter = "ref:" + m_Asset.GetInstanceID() + ":" + path;
-
-            return searchFilter;
-        }
-
-        protected virtual void OnClickFindInScene()
-        {
-            var searchFilter = GetFindInSceneSearchFilter();
-            SearchableEditorWindowUtil.ForEach((win) =>
-            {
-                win.SetSearchFilter(searchFilter, SearchableEditorWindow.SearchMode.All);
-            }, HierarchyType.GameObjects);
-        }
-
         protected string[] GetSearchInFolders()
         {
             if (m_FolderIdx == 0 || m_Folder == null)
@@ -181,10 +124,10 @@ namespace litefeel.Finder.Editor
                 switch (obj)
                 {
                     case SceneAsset _:
-                        has = FindUtil.InScene(path, m_Asset, InGameObject);
+                        has = FindUtil.InScene(path, InGameObject);
                         break;
                     case GameObject prefab:
-                        has = InGameObject(prefab, m_Asset);
+                        has = InGameObject(prefab);
                         break;
                 }
                 if (has)
@@ -196,7 +139,7 @@ namespace litefeel.Finder.Editor
             m_SimpleTreeView.Reload();
         }
 
-        protected abstract bool InGameObject(GameObject prefab, TAsset m_Asset);
+        protected abstract bool InGameObject(GameObject prefab);
 
         protected virtual void OnItemSelect(int index)
         {

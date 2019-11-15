@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace litefeel.Finder.Editor
 {
-    class FindMaterialByShader : FinderWindowBase<Shader, Material>
+    class FindMaterialByShader : FindAssetWindowBase<Shader, Material>
     {
         protected override void ConfigValues()
         {
@@ -31,7 +31,7 @@ namespace litefeel.Finder.Editor
                 m_ItemNames.Add(path);
             }
         }
-        protected override bool InGameObject(GameObject prefab, Shader m_Asset)
+        protected override bool InGameObject(GameObject prefab)
         {
             throw new System.NotImplementedException();
         }

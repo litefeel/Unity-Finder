@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace litefeel.Finder.Editor
 {
-    class FindPrefabByScript : FinderWindowBase<MonoScript, UnityEngine.Object>
+    class FindPrefabByScript : FindAssetWindowBase<MonoScript, UnityEngine.Object>
     {
         private System.Type m_ScriptType;
 
@@ -24,7 +24,7 @@ namespace litefeel.Finder.Editor
             m_EnabledFindInScene = m_ScriptType != null;
         }
 
-        protected override bool InGameObject(GameObject prefab, MonoScript m_Asset)
+        protected override bool InGameObject(GameObject prefab)
         {
             return prefab.GetComponentInChildren(m_ScriptType, true);
         }

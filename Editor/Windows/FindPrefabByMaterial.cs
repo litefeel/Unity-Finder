@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace litefeel.Finder.Editor
 {
-    class FindPrefabByMaterial : FinderWindowBase<Material, UnityEngine.Object>
+    class FindPrefabByMaterial : FindAssetWindowBase<Material, UnityEngine.Object>
     {
         protected override void ConfigValues()
         {
@@ -11,7 +11,7 @@ namespace litefeel.Finder.Editor
             m_EnabledFindInScene = m_Asset != null;
         }
 
-        protected override bool InGameObject(GameObject prefab, Material m_Asset)
+        protected override bool InGameObject(GameObject prefab)
         {
             return FindUtil.InGameObject(prefab, m_Asset);
         }
