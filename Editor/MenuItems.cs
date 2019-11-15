@@ -10,6 +10,16 @@ namespace litefeel.Finder.Editor
         {
             ShowWindow(typeof(FindMissingOnSelection));
         }
+        [MenuItem("Assets/Finder/Find Missing - Current Scene", priority = 0)]
+        static void FindMissingOnCurrentScene()
+        {
+            ShowWindow(typeof(FindMissingOnCurrentScene));
+        }
+        [MenuItem("Assets/Finder/Find Missing - All Assets", priority = 0)]
+        static void FindMissingOnAllAssets()
+        {
+            ShowWindow(typeof(FindMissingOnAllAssets));
+        }
         [MenuItem("Assets/Finder/Find Prefabs By Shader", priority = 100)]
         static void FindPrefabByShader()
         {
