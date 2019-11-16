@@ -66,6 +66,11 @@ namespace litefeel.Finder.Editor
                 ForeachTransform(trans.GetChild(i), list);
         }
 
+        protected override void OnItemDoubleClick(int index)
+        {
+            Selection.activeTransform = m_Items[index];
+        }
+
     }
 }
 
