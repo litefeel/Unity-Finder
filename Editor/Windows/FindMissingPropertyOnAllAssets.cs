@@ -17,20 +17,6 @@ namespace litefeel.Finder.Editor
             return has;
         }
 
-        private bool InMaterial(Material mat, Texture tex)
-        {
-            var so = new SerializedObject(mat);
-            so.Update();
-            var property = so.GetIterator();
-            bool expanded = true;
-            while (property.NextVisible(expanded))
-            {
-                if (property.propertyType == SerializedPropertyType.ObjectReference
-                    && property.objectReferenceValue == tex)
-                    return true;
-            }
-            return false;
-        }
         private bool ForeachTransform(Transform trans, List<Transform> list)
         {
             var comps = ListPool<Component>.Get();
@@ -41,15 +27,9 @@ namespace litefeel.Finder.Editor
                 {
                     var so = new SerializedObject(comp);
                     so.Update();
-                    var property = so.GetIterator();
-                    bool expanded = true;
-                    while (property.NextVisible(expanded))
-                    {
-                        if (property.propertyType == SerializedPropertyType.ObjectReference
-                            && property.objectReferenceValue == null
-                            && property.objectReferenceInstanceIDValue != 0)
-                            return true;
-                    }
+                    var prop = so.GetIterator();
+                    if (CheckMissing(prop, true))
+                        return true;
                 }
             }
             var count = trans.childCount;
@@ -60,6 +40,29 @@ namespace litefeel.Finder.Editor
             }
             return false;
         }
+
+        private bool CheckMissing(SerializedProperty prop, bool isFirst)
+        {
+            bool expanded = true;
+            SerializedProperty end = null;
+            if (!isFirst)
+                end = prop.GetEndProperty();
+            while (prop.NextVisible(expanded))
+            {
+                if (!isFirst && SerializedProperty.EqualContents(prop, end))
+                    return false;
+                if (prop.propertyType == SerializedPropertyType.ObjectReference
+                    && EditorUtil.IsMissing(prop))
+                    return true;
+
+                if (CheckMissing(prop.Copy(), false))
+                    return true;
+
+                expanded = false;
+            }
+            return false;
+        }
+
         protected override void OnItemDoubleClick(int index)
         {
             AssetDatabase.OpenAsset(m_Items[index]);

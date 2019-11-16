@@ -26,5 +26,14 @@ namespace litefeel.Finder.Editor
                 style = EditorStyles.label;
             return style.CalcSize(label).x;
         }
+
+        static System.Reflection.PropertyInfo m_objectReferenceStringValue;
+        public static bool IsMissing(SerializedProperty prop)
+        {
+            if(m_objectReferenceStringValue == null)
+                m_objectReferenceStringValue = typeof(SerializedProperty).GetProperty("objectReferenceStringValue", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            var str = m_objectReferenceStringValue.GetValue(prop) as string;
+            return str.StartsWith("Missing ");
+        }
     }
 }
