@@ -1,6 +1,6 @@
 ﻿namespace litefeel.Finder.Editor
 {
-    public enum SearchType
+    public enum SearchAssetType
     {
         All,
         PrefabOnly,

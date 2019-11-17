@@ -9,6 +9,7 @@ namespace litefeel.Finder.Editor
         protected override void ConfigValues()
         {
             m_DisableFind = m_Asset == null;
+            m_IgnoreScearchAssetType = true;
         }
 
         protected override void DoFind()

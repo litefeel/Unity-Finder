@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.Experimental.SceneManagement;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 namespace litefeel.Finder.Editor
@@ -24,7 +27,7 @@ namespace litefeel.Finder.Editor
         public static bool InGameObject(GameObject go)
         {
             var comps = go.GetComponentsInChildren<Component>(true);
-            for(var i = 0; i < comps.Length; i++)
+            for (var i = 0; i < comps.Length; i++)
             {
                 if (comps[i] == null)
                     return true;
@@ -83,5 +86,99 @@ namespace litefeel.Finder.Editor
             }
             return false;
         }
+
+
+        public static void FilterCurrentStageOrScene(Func<Transform, bool> func, List<Transform> results)
+        {
+            using(var scope = ListPoolScope<Transform>.Create())
+            {
+                var stage = PrefabStageUtility.GetCurrentPrefabStage();
+                if (stage != null)
+                {
+                    stage.prefabContentsRoot.transform.GetComponentsInChildren(true, scope.list);
+                }
+                else
+                {
+                    var count = EditorSceneManager.loadedSceneCount;
+                    for (var i = 0; i < count; i++)
+                    {
+                        using (var gos = ListPoolScope<GameObject>.Create())
+                        {
+                            var scene = EditorSceneManager.GetSceneAt(i);
+                            scene.GetRootGameObjects(gos.list);
+                            foreach (var go in gos.list)
+                            {
+                                go.GetComponentsInChildren(true, scope.list);
+                            }
+                        }
+                    }
+                }
+                for (var i = 0; i < scope.list.Count; i++)
+                {
+                    if (func(scope.list[i]))
+                        results.Add(scope.list[i]);
+                }
+            }
+        }
+
+        #region Check Missing
+        public static bool CheckMissingScriptOnTransfrom(Transform trans)
+        {
+            using (var scope = ListPoolScope<Component>.Create())
+            {
+                trans.GetComponents(scope.list);
+                foreach (var comp in scope.list)
+                {
+                    if (comp == null)
+                        return true;
+                }
+            }
+            return false;
+        }
+
+        public static bool CheckMissingPropOnTransfrom(Transform trans)
+        {
+            using (var scope = ListPoolScope<Component>.Create())
+            {
+                trans.GetComponents(scope.list);
+                foreach (var comp in scope.list)
+                {
+                    if (comp && CheckMissingProp(comp))
+                        return true;
+                }
+            }
+            return false;
+        }
+
+        public static bool CheckMissingProp(Component comp)
+        {
+            var so = new SerializedObject(comp);
+            so.Update();
+            var prop = so.GetIterator();
+            return CheckMissingProp(prop, true);
+        }
+
+        public static bool CheckMissingProp(SerializedProperty prop, bool isFirst)
+        {
+            bool expanded = true;
+            SerializedProperty end = null;
+            if (!isFirst)
+                end = prop.GetEndProperty();
+            while (prop.NextVisible(expanded))
+            {
+                if (!isFirst && SerializedProperty.EqualContents(prop, end))
+                    return false;
+                if (prop.propertyType == SerializedPropertyType.ObjectReference
+                    && EditorUtil.IsMissing(prop))
+                    return true;
+
+                if (CheckMissingProp(prop.Copy(), false))
+                    return true;
+
+                expanded = false;
+            }
+            return false;
+        }
+        #endregion
     }
 }

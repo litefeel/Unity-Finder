@@ -5,25 +5,25 @@ namespace litefeel.Finder.Editor
 {
     static class MenuItems
     {
-        [MenuItem("Assets/Finder/Find Missing - Current Scene", priority = 0)]
-        static void FindMissingOnCurrentScene()
-        {
-            ShowWindow(typeof(FindMissingOnCurrentScene));
-        }
-        [MenuItem("Assets/Finder/Find Missing - All Assets", priority = 0)]
+        [MenuItem("Assets/Finder/Find Missing Script - All Assets", priority = 0)]
         static void FindMissingOnAllAssets()
         {
             ShowWindow(typeof(FindMissingOnAllAssets));
         }
-        [MenuItem("Assets/Finder/Find Missing Prop - Current Scene", priority = 0)]
-        static void FindMissingPropertyOnCurrentScene()
+        [MenuItem("Assets/Finder/Find Missing Script - Current Scene", priority = 0)]
+        static void FindMissingOnCurrentScene()
         {
-            ShowWindow(typeof(FindMissingPropertyOnCurrentScene));
+            ShowWindow(typeof(FindMissingOnCurrentScene));
         }
-        [MenuItem("Assets/Finder/Find Missing Prop - All Assets", priority = 0)]
+        [MenuItem("Assets/Finder/Find Missing Prop  - All Assets", priority = 0)]
         static void FindMissingPropertyOnAllAssets()
         {
             ShowWindow(typeof(FindMissingPropertyOnAllAssets));
+        }
+        [MenuItem("Assets/Finder/Find Missing Prop  - Current Scene", priority = 0)]
+        static void FindMissingPropertyOnCurrentScene()
+        {
+            ShowWindow(typeof(FindMissingPropertyOnCurrentScene));
         }
         [MenuItem("Assets/Finder/Find Prefabs By Shader", priority = 100)]
         static void FindPrefabByShader()

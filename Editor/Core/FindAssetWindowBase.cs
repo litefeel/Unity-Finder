@@ -12,6 +12,8 @@ namespace litefeel.Finder.Editor
         where TObject : UnityObject
     {
         protected TAsset m_Asset;
+        protected bool m_EnabledFindInScene;
+
 
         public virtual void InitAsset(UnityObject obj)
         {

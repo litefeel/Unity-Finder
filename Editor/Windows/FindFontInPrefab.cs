@@ -10,7 +10,7 @@ namespace litefeel.Finder.Editor
     {
         protected override void OnGUIBody()
         {
-            m_IgnoreSearchFolder = true;
+            m_IgnoreSearchAssetFolder = true;
             base.OnGUIBody();
             m_DisableFind = m_Asset == null;
         }
