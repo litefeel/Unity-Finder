@@ -36,6 +36,7 @@ namespace litefeel.Finder.Editor
         }
         public static bool AnyOneProperty(Func<SerializedProperty, bool> func, UnityEngine.Object obj)
         {
+            if (obj == null) return false;
             var so = new SerializedObject(obj);
             so.Update();
             var prop = so.GetIterator();
