@@ -26,17 +26,11 @@ namespace litefeel.Finder.Editor
 
         private bool InMaterial(Material mat, Texture tex)
         {
-            var so = new SerializedObject(mat);
-            so.Update();
-            var property = so.GetIterator();
-            bool expanded = true;
-            while (property.NextVisible(expanded))
+            return UnityUtil.AnyOneProperty((prop) =>
             {
-                if (property.propertyType == SerializedPropertyType.ObjectReference
-                    && property.objectReferenceValue == tex)
-                    return true;
-            }
-            return false;
+                return prop.propertyType == SerializedPropertyType.ObjectReference
+                    && prop.objectReferenceValue == tex;
+            }, mat);
         }
 
         private void FillMatNames(List<Material> mats)

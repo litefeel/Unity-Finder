@@ -90,7 +90,7 @@ namespace litefeel.Finder.Editor
 
         public static void FilterCurrentStageOrScene(Func<Transform, bool> func, List<Transform> results)
         {
-            using(var scope = ListPoolScope<Transform>.Create())
+            using (var scope = ListPoolScope<Transform>.Create())
             {
                 var stage = PrefabStageUtility.GetCurrentPrefabStage();
                 if (stage != null)
@@ -143,40 +143,19 @@ namespace litefeel.Finder.Editor
                 trans.GetComponents(scope.list);
                 foreach (var comp in scope.list)
                 {
-                    if (comp && CheckMissingProp(comp))
+                    if (comp && UnityUtil.AnyOneProperty(CheckMissingProp, comp))
                         return true;
                 }
             }
             return false;
         }
 
-        public static bool CheckMissingProp(Component comp)
+        public static bool CheckMissingProp(SerializedProperty prop)
         {
-            var so = new SerializedObject(comp);
-            so.Update();
-            var prop = so.GetIterator();
-            return CheckMissingProp(prop, true);
-        }
+            if (prop.propertyType == SerializedPropertyType.ObjectReference
+                && EditorUtil.IsMissing(prop))
+                return true;
 
-        public static bool CheckMissingProp(SerializedProperty prop, bool isFirst)
-        {
-            bool expanded = true;
-            SerializedProperty end = null;
-            if (!isFirst)
-                end = prop.GetEndProperty();
-            while (prop.NextVisible(expanded))
-            {
-                if (!isFirst && SerializedProperty.EqualContents(prop, end))
-                    return false;
-                if (prop.propertyType == SerializedPropertyType.ObjectReference
-                    && EditorUtil.IsMissing(prop))
-                    return true;
-
-                if (CheckMissingProp(prop.Copy(), false))
-                    return true;
-
-                expanded = false;
-            }
             return false;
         }
         #endregion

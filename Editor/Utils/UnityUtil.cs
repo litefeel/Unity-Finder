@@ -20,7 +20,34 @@ namespace litefeel.Finder.Editor
             ListPool<string>.Release(list);
             return fullpath;
         }
+        
+        public static bool AnyOneProperty(Func<SerializedProperty, bool> func, UnityEngine.Object obj)
+        {
+            var so = new SerializedObject(obj);
+            so.Update();
+            var prop = so.GetIterator();
+            return AnyOneProperty(func, prop, true);
+        }
+        public static bool AnyOneProperty(Func<SerializedProperty, bool> func, SerializedProperty prop, bool isFirst)
+        {
+            bool expanded = true;
+            SerializedProperty end = null;
+            if (!isFirst)
+                end = prop.GetEndProperty();
+            while (prop.NextVisible(expanded))
+            {
+                if (!isFirst && SerializedProperty.EqualContents(prop, end))
+                    return false;
+                if (func(prop))
+                    return true;
+               
+                if (AnyOneProperty(func, prop.Copy(), false))
+                    return true;
 
+                expanded = false;
+            }
+            return false;
+        }
 
         public static bool AnyOneTransform(Func<Transform, bool> func, Transform root)
         {
