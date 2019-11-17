@@ -5,11 +5,6 @@ namespace litefeel.Finder.Editor
 {
     static class MenuItems
     {
-        [MenuItem("Assets/Finder/Find Missing - Current Selection", priority = 0)]
-        static void FindMissingOnSelection()
-        {
-            ShowWindow(typeof(FindMissingOnSelection));
-        }
         [MenuItem("Assets/Finder/Find Missing - Current Scene", priority = 0)]
         static void FindMissingOnCurrentScene()
         {
@@ -19,6 +14,11 @@ namespace litefeel.Finder.Editor
         static void FindMissingOnAllAssets()
         {
             ShowWindow(typeof(FindMissingOnAllAssets));
+        }
+        [MenuItem("Assets/Finder/Find Missing Prop - Current Scene", priority = 0)]
+        static void FindMissingPropertyOnCurrentScene()
+        {
+            ShowWindow(typeof(FindMissingPropertyOnCurrentScene));
         }
         [MenuItem("Assets/Finder/Find Missing Prop - All Assets", priority = 0)]
         static void FindMissingPropertyOnAllAssets()
