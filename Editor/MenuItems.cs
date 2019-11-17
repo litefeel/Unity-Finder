@@ -40,10 +40,10 @@ namespace litefeel.Finder.Editor
         {
             ShowWindow<FindPrefabByScript>();
         }
-        [MenuItem("Assets/Finder/Find Prefabs By Audio Clip", priority = 100)]
-        static void FindPrefabByAudio()
+        [MenuItem("Assets/Finder/Find Prefabs By Animation Clip", priority = 100)]
+        static void FindPrefabByAnimation()
         {
-            ShowWindow<FindPrefabByAudio>();
+            ShowWindow<FindPrefabByAnimation>();
         }
         [MenuItem("Assets/Finder/Find Materials By Shader", priority = 200)]
         static void FindMaterialByShader()
