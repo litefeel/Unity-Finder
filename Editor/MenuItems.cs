@@ -25,6 +25,11 @@ namespace litefeel.Finder.Editor
         {
             ShowWindow(typeof(FindMissingPropertyOnCurrentScene));
         }
+        [MenuItem("Assets/Finder/Find Usage", priority = 100)]
+        static void FindUsage()
+        {
+            ShowWindow<FindUsage>();
+        }
         [MenuItem("Assets/Finder/Find Prefabs By Shader", priority = 100)]
         static void FindPrefabByShader()
         {

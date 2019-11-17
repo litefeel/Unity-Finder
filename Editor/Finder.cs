@@ -15,6 +15,26 @@ namespace litefeel.Finder.Editor
 
 
         private static List<Material> s_TempMats = new List<Material>();
+
+        public static void Progress<T>(Action<T> action, T[] list, string title = "Progress Materials", string content = "{0}/{count}")
+        {
+            var count = list.Length;
+            EditorUtility.DisplayCancelableProgressBar("Progressing", $"0/{count}", 0);
+            try
+            {
+                for (var i = 0; i < count; i++)
+                {
+                    EditorUtility.DisplayCancelableProgressBar("Progressing", $"{i}/{count}", i / (float)count);
+                    action(list[i]);
+                }
+            }
+            finally
+            {
+                EditorUtility.ClearProgressBar();
+            }
+        }
+
+
         public static void ForeachMats(Action<Material, string> action, bool showProgress = true, string[] searchInFolders = null)
         {
 

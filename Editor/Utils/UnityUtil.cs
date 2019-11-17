@@ -50,15 +50,18 @@ namespace litefeel.Finder.Editor
                 end = prop.GetEndProperty();
             while (prop.NextVisible(expanded))
             {
+                expanded = false;
                 if (!isFirst && SerializedProperty.EqualContents(prop, end))
                     return false;
+                if (prop.propertyType != SerializedPropertyType.ObjectReference ||
+                    prop.propertyType != SerializedPropertyType.Generic)
+                    continue;
                 if (func(prop))
                     return true;
 
                 if (AnyOneProperty(func, prop.Copy(), false))
                     return true;
 
-                expanded = false;
             }
             return false;
         }
