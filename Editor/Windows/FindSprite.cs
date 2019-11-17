@@ -7,9 +7,9 @@ namespace litefeel.Finder.Editor
 {
     class FindSprite : FindAssetWindowBase<Sprite, GameObject>
     {
-        protected override void OnGUI()
+        protected override void OnGUIBody()
         {
-            base.OnGUI();
+            base.OnGUIBody();
             m_DisableFind = m_Asset == null;
         }
 

@@ -8,10 +8,10 @@ namespace litefeel.Finder.Editor
 {
     class FindFontInPrefab : FindAssetWindowBase<Font, Text>
     {
-        protected override void OnGUI()
+        protected override void OnGUIBody()
         {
             m_IgnoreSearchFolder = true;
-            base.OnGUI();
+            base.OnGUIBody();
             m_DisableFind = m_Asset == null;
         }
 

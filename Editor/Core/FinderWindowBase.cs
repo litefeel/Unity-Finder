@@ -58,11 +58,15 @@ namespace litefeel.Finder.Editor
             m_SimpleTreeView.Reload();
         }
 
-        protected virtual void OnGUI()
+        private void OnGUI()
         {
             if (Event.current.type == EventType.Layout)
                 ConfigValues();
+            OnGUIBody();
+        }
 
+        protected virtual void OnGUIBody()
+        {
             EditorGUILayout.BeginHorizontal();
             {
                 using (new EditorGUI.DisabledScope(m_DisableFind))

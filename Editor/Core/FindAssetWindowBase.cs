@@ -18,7 +18,7 @@ namespace litefeel.Finder.Editor
             m_Asset = obj as TAsset;
         }
 
-        protected override void OnGUI()
+        protected override void OnGUIBody()
         {
             EditorGUILayout.BeginHorizontal();
             {
@@ -27,7 +27,7 @@ namespace litefeel.Finder.Editor
             }
             EditorGUILayout.EndHorizontal();
 
-            base.OnGUI();
+            base.OnGUIBody();
         }
 
         protected virtual void OnGUIFindInScene()
