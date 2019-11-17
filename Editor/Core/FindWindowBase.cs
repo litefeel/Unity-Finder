@@ -148,10 +148,10 @@ namespace litefeel.Finder.Editor
                 switch (obj)
                 {
                     case SceneAsset _:
-                        has = FindUtil.InScene(path, InGameObject);
+                        has = FindUtil.InScene(path, InGameObjectAndChildren);
                         break;
                     case GameObject prefab:
-                        has = InGameObject(prefab);
+                        has = InGameObjectAndChildren(prefab);
                         break;
                 }
                 if (has)
@@ -163,7 +163,7 @@ namespace litefeel.Finder.Editor
             m_SimpleTreeView.Reload();
         }
 
-        protected abstract bool InGameObject(GameObject prefab);
+        protected abstract bool InGameObjectAndChildren(GameObject prefab);
 
         protected virtual void OnItemSelect(int index)
         {

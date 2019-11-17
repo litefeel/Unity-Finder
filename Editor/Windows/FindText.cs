@@ -22,7 +22,7 @@ namespace litefeel.Finder.Editor
             FillMatNames(m_Items);
         }
 
-        protected override bool InGameObject(GameObject prefab)
+        protected override bool InGameObjectAndChildren(GameObject prefab)
         {
             throw new System.NotImplementedException();
         }

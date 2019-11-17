@@ -24,7 +24,7 @@ namespace litefeel.Finder.Editor
             m_EnabledFindInScene = m_ScriptType != null;
         }
 
-        protected override bool InGameObject(GameObject prefab)
+        protected override bool InGameObjectAndChildren(GameObject prefab)
         {
             return prefab.GetComponentInChildren(m_ScriptType, true);
         }

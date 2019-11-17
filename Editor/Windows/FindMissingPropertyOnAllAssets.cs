@@ -7,9 +7,9 @@ namespace litefeel.Finder.Editor
 {
     class FindMissingPropertyOnAllAssets : FindWindowBase<UnityObject>
     {
-        protected override bool InGameObject(GameObject prefab)
+        protected override bool InGameObjectAndChildren(GameObject prefab)
         {
-            return UnityUtil.AnyOneTransform(FindUtil.CheckMissingPropOnTransfrom, prefab.transform);
+            return UnityUtil.AnyOneTransformAndChildren(FindUtil.CheckMissingPropOnTransfrom, prefab.transform);
         }
 
         protected override void OnItemDoubleClick(int index)

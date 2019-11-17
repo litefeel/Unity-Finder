@@ -9,9 +9,9 @@ namespace litefeel.Finder.Editor
     using static FindUtil;
     class FindMissingOnAllAssets : FindWindowBase<UnityObject>
     {
-        protected override bool InGameObject(GameObject prefab)
+        protected override bool InGameObjectAndChildren(GameObject prefab)
         {
-            return AnyOneTransform(CheckMissingScriptOnTransfrom, prefab.transform);
+            return AnyOneTransformAndChildren(CheckMissingScriptOnTransfrom, prefab.transform);
         }
 
         protected override void OnItemDoubleClick(int index)

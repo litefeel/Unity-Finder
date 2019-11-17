@@ -26,7 +26,7 @@ namespace litefeel.Finder.Editor
             m_SimpleTreeView.Reload();
         }
 
-        protected override bool InGameObject(GameObject prefab) { return false; }
+        protected override bool InGameObjectAndChildren(GameObject prefab) { return false; }
 
         protected override void OnItemDoubleClick(int index)
         {
