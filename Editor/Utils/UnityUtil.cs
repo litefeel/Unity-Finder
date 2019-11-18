@@ -39,6 +39,7 @@ namespace litefeel.Finder.Editor
             if (obj == null) return false;
             var so = new SerializedObject(obj);
             so.Update();
+            //Debug.Log(obj);
             var prop = so.GetIterator();
             return AnyOneProperty(func, prop, true);
         }
@@ -53,8 +54,10 @@ namespace litefeel.Finder.Editor
                 expanded = false;
                 if (!isFirst && SerializedProperty.EqualContents(prop, end))
                     return false;
-                if (prop.propertyType != SerializedPropertyType.ObjectReference ||
-                    prop.propertyType != SerializedPropertyType.Generic)
+                var propType = prop.propertyType;
+                //Debug.Log(prop.propertyPath);
+                if (propType != SerializedPropertyType.ObjectReference &&
+                    propType != SerializedPropertyType.Generic)
                     continue;
                 if (func(prop))
                     return true;

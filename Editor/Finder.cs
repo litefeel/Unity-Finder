@@ -24,7 +24,8 @@ namespace litefeel.Finder.Editor
             {
                 for (var i = 0; i < count; i++)
                 {
-                    EditorUtility.DisplayCancelableProgressBar("Progressing", $"{i}/{count}", i / (float)count);
+                    if(EditorUtility.DisplayCancelableProgressBar("Progressing", list[i].ToString(), i / (float)count))
+                        return;
                     action(list[i]);
                 }
             }

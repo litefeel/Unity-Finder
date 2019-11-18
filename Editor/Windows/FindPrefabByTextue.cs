@@ -15,6 +15,7 @@ namespace litefeel.Finder.Editor
         {
             return UnityUtil.AnyOneComponentAndChildren<Component>((comp) =>
             {
+                if (FindUtil.IgnoreType(comp)) return false;
                 return UnityUtil.AnyOneProperty((prop) =>
                 {
                     return prop.propertyType == SerializedPropertyType.ObjectReference &&

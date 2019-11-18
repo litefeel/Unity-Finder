@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEditor.Experimental.SceneManagement;
 using UnityEditor.SceneManagement;
@@ -9,6 +10,25 @@ namespace litefeel.Finder.Editor
 {
     static class FindUtil
     {
+        private static HashSet<Type> s_IgnoreTypes = new HashSet<Type>()
+        {
+            typeof(Transform),
+            typeof(RectTransform),
+            typeof(CanvasGroup),
+            typeof(CanvasRenderer),
+            typeof(UnityEngine.UI.Outline),
+            
+        };
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IgnoreType(Type type)
+        {
+            return s_IgnoreTypes.Contains(type);
+        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IgnoreType(Component obj)
+        {
+            return obj != null && s_IgnoreTypes.Contains(obj.GetType());
+        }
         public static bool InScene(string scenePath, Func<GameObject, bool> InGameObject)
         {
             bool has = false;

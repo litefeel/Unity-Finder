@@ -6,6 +6,7 @@ namespace litefeel.Finder.Editor
 {
     class FindUsage : FindAssetWindowBase<UnityEngine.Object, UnityEngine.Object>
     {
+        readonly Type m_UnityObjectType = typeof(UnityEngine.Object);
         protected override void ConfigValues()
         {
             m_DisableFind = m_Asset == null;
@@ -18,7 +19,7 @@ namespace litefeel.Finder.Editor
             m_ItemNames.Clear();
             var time = DateTime.Now;
             var paths = AssetDatabase.GetAllAssetPaths();
-            //paths = new string[] { "Assets/Animation/Animation.unity" };
+            //paths = new string[] { "Assets/Art/FBmap/Materials/7.mat", "Assets/BuildOnlyAssets/FX/Materials/Eagle_high_fx.mat" };
             Finder.Progress((path) =>
             {
                 var ext = System.IO.Path.GetExtension(path);
@@ -32,11 +33,23 @@ namespace litefeel.Finder.Editor
                         }
                         return;
                 }
-                //Debug.Log(ext + " "+path);
+                //Debug.Log(ext + " " + path);
                 var assets = AssetDatabase.LoadAllAssetsAtPath(path);
                 foreach (var asset in assets)
                 {
+                    // asset is null when missing script
+                    if (asset == null) continue;
                     if (asset == m_Asset) continue;
+                    if (asset.GetType() == m_UnityObjectType)
+                    {
+                        // UnityObject cannot contain other asset
+                        continue;
+                        //Debug.Log($"{asset}, {asset.GetType()}, {asset.name}, {path}");
+                        // Ignore Deprecated EditorExtensionImpl
+                        //if (asset.name == "Deprecated EditorExtensionImpl")
+                        //    continue;
+                    }
+
                     if (InAsset(asset, path))
                         m_Items.Add(asset);
                 }
@@ -60,7 +73,7 @@ namespace litefeel.Finder.Editor
                     return UnityUtil.AnyOneProperty((prop) =>
                     {
                         return prop.propertyType == SerializedPropertyType.ObjectReference &&
-                        prop.objectReferenceValue == m_Asset;
+                            prop.objectReferenceValue == m_Asset;
 
                     }, asset);
             }
@@ -70,6 +83,7 @@ namespace litefeel.Finder.Editor
         {
             return UnityUtil.AnyOneComponentAndChildren<Component>((comp) =>
             {
+                if (FindUtil.IgnoreType(comp)) return false;
                 return UnityUtil.AnyOneProperty((prop) =>
                 {
                     return prop.propertyType == SerializedPropertyType.ObjectReference &&
