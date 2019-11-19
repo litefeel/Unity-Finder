@@ -55,10 +55,10 @@ namespace litefeel.Finder.Editor
         {
             ShowWindow<FindPrefabByTextue>();
         }
-        [MenuItem("Assets/Finder/Find Materials By Shader", priority = 200)]
-        static void FindMaterialByShader()
+        [MenuItem("Assets/Finder/Find Prefabs By Child Name", priority = 100)]
+        static void FindPrefabByChildrenName()
         {
-            ShowWindow<FindMaterialByShader>();
+            ShowWindow(typeof(FindPrefabByChildrenName));
         }
         [MenuItem("Assets/Finder/Find Materials By Texture", priority = 200)]
         static void FindMaterialByTexture()
