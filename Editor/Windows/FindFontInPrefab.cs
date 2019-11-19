@@ -15,7 +15,7 @@ namespace litefeel.Finder.Editor
             m_DisableFind = m_Asset == null;
         }
 
-        protected override void OnGUISearchFolder()
+        protected override void OnGUISearchAssetFolder()
         {
         }
 

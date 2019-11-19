@@ -13,13 +13,16 @@ namespace litefeel.Finder.Editor
         protected string m_Message;
 
         // asset type for search
+        private float m_FilterByTypeWith;
+        protected GUIContent m_FilterByType;
         protected bool m_IgnoreScearchAssetType;
         protected SearchAssetType m_SearchAssetType;
 
         // asset folder for serach
+        private float m_FilterByFolderWith;
+        protected GUIContent m_FilterByFolder;
         protected bool m_IgnoreSearchAssetFolder;
-        protected int m_FolderIdx;
-        protected string[] m_FolderOptions = new string[] { "All Assets", "Folder" };
+        protected SearchAssetFolder m_SearchAssetFolder;
         protected DefaultAsset m_Folder;
 
         protected List<string> m_ItemNames = new List<string>();
@@ -34,23 +37,10 @@ namespace litefeel.Finder.Editor
         private string m_FilterStr;
 
         private GUIStyle m_PopupStyle;
-        private GUIStyle PopupStyle
-        {
-            get
-            {
-                if(m_PopupStyle == null)
-                {
-                    m_PopupStyle = new GUIStyle(EditorStyles.popup);
-                    m_PopupStyle.fixedHeight = EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing * 2;
-                }
-                return m_PopupStyle;
-            }
-        }
+        private bool m_Inited;
 
         protected virtual void OnEnable()
         {
-            
-
             if (m_TreeViewState == null)
                 m_TreeViewState = new TreeViewState();
             m_SimpleTreeView = new SimpleTreeView(m_TreeViewState);
@@ -61,8 +51,24 @@ namespace litefeel.Finder.Editor
             m_SimpleTreeView.Reload();
         }
 
+        private void Init()
+        {
+            if (m_Inited) return;
+            m_Inited = true;
+
+            m_PopupStyle = new GUIStyle(EditorStyles.popup);
+            m_PopupStyle.fixedHeight = EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
+
+            m_FilterByType = new GUIContent(EditorGUIUtility.FindTexture("FilterByType"), "Search by Type");
+            m_FilterByTypeWith = EditorUtil.CalcLabelSize(EditorUtil.GetDisplayName(SearchAssetType.Prefab), m_PopupStyle);
+            
+            m_FilterByFolder = new GUIContent(EditorGUIUtility.FindTexture("Project"), "Search by Folder");
+            m_FilterByFolderWith = EditorUtil.CalcLabelSize(EditorUtil.GetDisplayName(SearchAssetFolder.AssetsAndPackages), m_PopupStyle);
+        }
+
         private void OnGUI()
         {
+            Init();
             if (Event.current.type == EventType.Layout)
                 ConfigValues();
             OnGUIBody();
@@ -80,13 +86,10 @@ namespace litefeel.Finder.Editor
                     if (GUILayout.Button("Find", options))
                         DoFind();
                 }
-                if (!m_IgnoreScearchAssetType)
-                {
-                    var width = EditorUtil.CalcLabelSize(SearchAssetType.SceneOnly.ToString()) + 30;
-                    m_SearchAssetType = (SearchAssetType)EditorGUILayout.EnumPopup(m_SearchAssetType, PopupStyle, GUILayout.Width(width));
-                }
-                if (!m_IgnoreSearchAssetFolder)
-                    OnGUISearchFolder();
+
+                OnGUISearchAssetType();
+                OnGUISearchAssetFolder();
+
             }
             EditorGUILayout.EndHorizontal();
 
@@ -125,16 +128,35 @@ namespace litefeel.Finder.Editor
 
         protected string[] GetSearchInFolders()
         {
-            if (m_FolderIdx == 0 || m_Folder == null)
+            switch (m_SearchAssetFolder)
+            {
+                case SearchAssetFolder.Assets:
+                    return new string[] { "Assets" };
+                case SearchAssetFolder.AssetsAndPackages:
+                    return Array.Empty<string>();
+            }
+            if (m_Folder == null)
                 return Array.Empty<string>();
 
             return new string[] { AssetDatabase.GetAssetPath(m_Folder) };
         }
 
-        protected virtual void OnGUISearchFolder()
+        protected virtual void OnGUISearchAssetType()
         {
-            m_FolderIdx = GUILayout.SelectionGrid(m_FolderIdx, m_FolderOptions, 2, EditorStyles.radioButton, GUILayout.ExpandWidth(false));
-            using (new EditorGUI.DisabledScope(m_FolderIdx == 0))
+            if (m_IgnoreScearchAssetType) return;
+
+            EditorGUILayout.DropdownButton(m_FilterByType, FocusType.Passive, EditorStyles.largeLabel, GUILayout.ExpandWidth(false));
+            m_SearchAssetType = (SearchAssetType)EditorGUILayout.EnumPopup(m_SearchAssetType, m_PopupStyle, GUILayout.Width(m_FilterByTypeWith));
+        }
+
+        protected virtual void OnGUISearchAssetFolder()
+        {
+            if (m_IgnoreSearchAssetFolder) return;
+
+            EditorGUILayout.DropdownButton(m_FilterByFolder, FocusType.Passive, EditorStyles.largeLabel, GUILayout.ExpandWidth(false));
+
+            m_SearchAssetFolder = (SearchAssetFolder)EditorGUILayout.EnumPopup(m_SearchAssetFolder, m_PopupStyle, GUILayout.Width(m_FilterByFolderWith));
+            using (new EditorGUI.DisabledScope(m_SearchAssetFolder != SearchAssetFolder.Folder))
                 m_Folder = EditorGUILayout.ObjectField(m_Folder, typeof(DefaultAsset), false, GUILayout.ExpandWidth(true)) as DefaultAsset;
         }
 

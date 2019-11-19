@@ -100,8 +100,8 @@ namespace litefeel.Finder.Editor
             string filter;
             switch (searchType)
             {
-                case SearchAssetType.PrefabOnly: filter = "t:Prefab"; break;
-                case SearchAssetType.SceneOnly: filter = "t:Scene"; break;
+                case SearchAssetType.Prefab: filter = "t:Prefab"; break;
+                case SearchAssetType.Scene: filter = "t:Scene"; break;
                 default: filter = "t:Prefab t:Scene"; break;
             };
             var guids = AssetDatabase.FindAssets(filter, searchInFolders);

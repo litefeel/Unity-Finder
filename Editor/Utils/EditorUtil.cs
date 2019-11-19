@@ -1,4 +1,6 @@
-﻿using UnityEditor;
+﻿using System;
+using System.Reflection;
+using UnityEditor;
 using UnityEngine;
 
 namespace litefeel.Finder.Editor
@@ -25,6 +27,19 @@ namespace litefeel.Finder.Editor
             if (style == null)
                 style = EditorStyles.label;
             return style.CalcSize(label).x;
+        }
+
+        public static string GetDisplayName(Enum value)
+        {
+            var arr = value.GetType().GetMember(value.ToString());
+            MemberInfo memberInfo = arr.Length > 0 ? arr[0] : null;
+            if(memberInfo != null)
+            {
+                var attribute = memberInfo.GetCustomAttribute<InspectorNameAttribute>(false);
+                if (attribute != null)
+                    return attribute.displayName;
+            }
+            return value.ToString();
         }
 
         static System.Reflection.PropertyInfo m_objectReferenceStringValue;
