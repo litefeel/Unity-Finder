@@ -24,6 +24,7 @@ namespace litefeel.Finder.Editor
 
         private static void InitEnumData(Type enumType, bool excludeObsolete = true)
         {
+#if !UNITY_2019_2_OR_NEWER
             var sets = excludeObsolete ? s_NonObsoleteEnumTypes : s_EnumTypes;
             if (sets.Contains(enumType)) return;
 
@@ -32,36 +33,13 @@ namespace litefeel.Finder.Editor
 
             for (var i = 0; i < values.Length; i++)
                 displayNames[i] = GetDisplayName(values[i]);
-        }
-
-        public static string GetDisplayName(Enum value)
-        {
-            var enumStr = value.ToString();
-            var arr = value.GetType().GetMember(enumStr);
-            MemberInfo memberInfo = arr.Length > 0 ? arr[0] : null;
-            if (memberInfo != null)
-            {
-#if UNITY_2019_2_NEWER
-                var attribute = memberInfo.GetCustomAttribute<InspectorName>(false);
-                if (attribute != null)
-                    return attribute.displayName;
 #endif
-                var attribute = memberInfo.GetCustomAttribute<System.ComponentModel.DescriptionAttribute>(false);
-                if (attribute != null)
-                    return attribute.Description;
-            }
-            return enumStr;
         }
-
+#if !UNITY_2019_2_OR_NEWER
         private static void GetEnumData(Type enumType, bool excludeObsolete, out Enum[] values, out string[] displayNames)
         {
-#if UNITY_2019_3_ORNEWER
-            var EnumDataUtility = Type.GetType("UnityEditor.EnumDataUtility");
-            //var EnumDataUtility = typeof(EditorGUILayout).Assembly.GetType("UnityEditor.EnumDataUtility");
-#else
             //var EnumDataUtility = Type.GetType("UnityEditor.PopupCallbackInfo");
             var EnumDataUtility = typeof(EditorGUI);
-#endif
             var GetCachedEnumData = EnumDataUtility.GetMethod("GetCachedEnumData", BindingFlags.Static | BindingFlags.NonPublic);
             var EnumData = GetCachedEnumData.Invoke(null, new object[] { enumType, excludeObsolete });
             var valuesInfo = EnumData.GetType().GetField("values");
@@ -69,6 +47,27 @@ namespace litefeel.Finder.Editor
             var displayNamesInfo = EnumData.GetType().GetField("displayNames");
             displayNames = displayNamesInfo.GetValue(EnumData) as string[];
         }
+#endif
+        public static string GetDisplayName(Enum value)
+        {
+            var enumStr = value.ToString();
+            var arr = value.GetType().GetMember(enumStr);
+            MemberInfo memberInfo = arr.Length > 0 ? arr[0] : null;
+            if (memberInfo != null)
+            {
+#if UNITY_2019_2_OR_NEWER
+                var attribute = memberInfo.GetCustomAttribute<InspectorNameAttribute>(false);
+                if (attribute != null)
+                    return attribute.displayName;
+#else
+                var attribute = memberInfo.GetCustomAttribute<System.ComponentModel.DescriptionAttribute>(false);
+                if (attribute != null)
+                    return attribute.Description;
+#endif
+            }
+            return enumStr;
+        }
+
 
     }
 }

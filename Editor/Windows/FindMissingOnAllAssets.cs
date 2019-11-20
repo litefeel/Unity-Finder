@@ -13,12 +13,6 @@ namespace litefeel.Finder.Editor
         {
             return AnyOneTransformAndChildren(CheckMissingScriptOnTransfrom, prefab.transform);
         }
-
-        protected override void OnItemDoubleClick(int index)
-        {
-            AssetDatabase.OpenAsset(m_Items[index]);
-        }
-
     }
 }
 

@@ -36,6 +36,10 @@ namespace litefeel.Finder.Editor
         {
             throw new System.NotImplementedException();
         }
+        protected override void OnItemDoubleClick(int index)
+        {
+            Selection.activeObject = m_Items[index];
+        }
 
     }
 }

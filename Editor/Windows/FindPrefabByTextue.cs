@@ -25,10 +25,6 @@ namespace litefeel.Finder.Editor
             }, prefab.transform);
         }
 
-        protected override void OnItemDoubleClick(int index)
-        {
-            AssetDatabase.OpenAsset(m_Items[index]);
-        }
     }
 }
 

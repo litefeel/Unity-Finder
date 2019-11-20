@@ -97,15 +97,19 @@ namespace litefeel.Finder.Editor
                 EditorGUILayout.HelpBox(m_Message, MessageType.Warning, true);
 
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField(string.Format("Count:{0}", m_ItemNames.Count));
-            using (new EditorGUI.DisabledScope(m_ItemNames.Count == 0))
             {
-                EditorGUILayout.LabelField("Filter:", GUILayout.Width(EditorUtil.CalcLabelSize("Filter:")));
-                var tmpStr = EditorGUILayout.TextField(m_FilterStr);
-                if (tmpStr != m_FilterStr)
+                var countStr = string.Format("Count:{0}", m_ItemNames.Count);
+                EditorGUILayout.LabelField(countStr, GUILayout.Width(EditorUtil.CalcLabelSize(countStr)));
+                GUILayout.FlexibleSpace();
+                using (new EditorGUI.DisabledScope(m_ItemNames.Count == 0))
                 {
-                    m_FilterStr = tmpStr;
-                    m_SimpleTreeView.SetFilter(m_FilterStr);
+                    EditorGUILayout.LabelField("Filter:", GUILayout.Width(EditorUtil.CalcLabelSize("Filter:")));
+                    var tmpStr = EditorGUILayout.TextField(m_FilterStr);
+                    if (tmpStr != m_FilterStr)
+                    {
+                        m_FilterStr = tmpStr;
+                        m_SimpleTreeView.SetFilter(m_FilterStr);
+                    }
                 }
             }
             EditorGUILayout.EndHorizontal();
@@ -197,7 +201,10 @@ namespace litefeel.Finder.Editor
             EditorGUIUtility.PingObject(m_Items[index]);
         }
 
-        protected virtual void OnItemDoubleClick(int index) { }
+        protected virtual void OnItemDoubleClick(int index)
+        {
+            AssetDatabase.OpenAsset(m_Items[index]);
+        }
     }
 
 }

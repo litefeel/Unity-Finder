@@ -11,12 +11,6 @@ namespace litefeel.Finder.Editor
         {
             return UnityUtil.AnyOneTransformAndChildren(FindUtil.CheckMissingPropOnTransfrom, prefab.transform);
         }
-
-        protected override void OnItemDoubleClick(int index)
-        {
-            AssetDatabase.OpenAsset(m_Items[index]);
-        }
-
     }
 }
 

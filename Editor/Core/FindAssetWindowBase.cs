@@ -71,7 +71,7 @@ namespace litefeel.Finder.Editor
                 win.SetSearchFilter(searchFilter, SearchableEditorWindow.SearchMode.All);
             }, HierarchyType.GameObjects);
         }
-        
+
     }
 
 }

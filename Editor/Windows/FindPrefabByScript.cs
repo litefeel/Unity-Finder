@@ -29,11 +29,6 @@ namespace litefeel.Finder.Editor
             return prefab.GetComponentInChildren(m_ScriptType, true);
         }
 
-        protected override void OnItemDoubleClick(int index)
-        {
-            AssetDatabase.OpenAsset(m_Items[index]);
-        }
-
         protected override string GetFindInSceneSearchFilter()
         {
             return $"t:{m_ScriptType.FullName}";

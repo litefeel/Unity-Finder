@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-#if !UNITY_2019_2_ORNEWER
+#if !UNITY_2019_2_OR_NEWER
 using InspectorName = System.ComponentModel.DescriptionAttribute;
 #endif
 namespace litefeel.Finder.Editor
