@@ -29,18 +29,7 @@ namespace litefeel.Finder.Editor
             return style.CalcSize(label).x;
         }
 
-        public static string GetDisplayName(Enum value)
-        {
-            var arr = value.GetType().GetMember(value.ToString());
-            MemberInfo memberInfo = arr.Length > 0 ? arr[0] : null;
-            if(memberInfo != null)
-            {
-                var attribute = memberInfo.GetCustomAttribute<InspectorNameAttribute>(false);
-                if (attribute != null)
-                    return attribute.displayName;
-            }
-            return value.ToString();
-        }
+        
 
         static System.Reflection.PropertyInfo m_objectReferenceStringValue;
         public static bool IsMissing(SerializedProperty prop)

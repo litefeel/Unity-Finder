@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 
+#if !UNITY_2019_2_ORNEWER
+using InspectorName = System.ComponentModel.DescriptionAttribute;
+#endif
 namespace litefeel.Finder.Editor
 {
     public enum SearchAssetType
@@ -12,7 +15,7 @@ namespace litefeel.Finder.Editor
     public enum SearchAssetFolder
     {
         Assets,
-        [InspectorName("Assets & Packages")]
+        [InspectorName("Assets + Packages")]
         AssetsAndPackages,
         Folder,
     }

@@ -60,10 +60,10 @@ namespace litefeel.Finder.Editor
             m_PopupStyle.fixedHeight = EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
 
             m_FilterByType = new GUIContent(EditorGUIUtility.FindTexture("FilterByType"), "Search by Type");
-            m_FilterByTypeWith = EditorUtil.CalcLabelSize(EditorUtil.GetDisplayName(SearchAssetType.Prefab), m_PopupStyle);
+            m_FilterByTypeWith = EditorUtil.CalcLabelSize(EditorGUILayoutUtil.GetDisplayName(SearchAssetType.Prefab), m_PopupStyle);
             
             m_FilterByFolder = new GUIContent(EditorGUIUtility.FindTexture("Project"), "Search by Folder");
-            m_FilterByFolderWith = EditorUtil.CalcLabelSize(EditorUtil.GetDisplayName(SearchAssetFolder.AssetsAndPackages), m_PopupStyle);
+            m_FilterByFolderWith = EditorUtil.CalcLabelSize(EditorGUILayoutUtil.GetDisplayName(SearchAssetFolder.AssetsAndPackages), m_PopupStyle);
         }
 
         private void OnGUI()
@@ -146,7 +146,7 @@ namespace litefeel.Finder.Editor
             if (m_IgnoreScearchAssetType) return;
 
             EditorGUILayout.DropdownButton(m_FilterByType, FocusType.Passive, EditorStyles.largeLabel, GUILayout.ExpandWidth(false));
-            m_SearchAssetType = (SearchAssetType)EditorGUILayout.EnumPopup(m_SearchAssetType, m_PopupStyle, GUILayout.Width(m_FilterByTypeWith));
+            m_SearchAssetType = (SearchAssetType)EditorGUILayoutUtil.EnumPopup(m_SearchAssetType, m_PopupStyle, GUILayout.Width(m_FilterByTypeWith));
         }
 
         protected virtual void OnGUISearchAssetFolder()
@@ -155,7 +155,7 @@ namespace litefeel.Finder.Editor
 
             EditorGUILayout.DropdownButton(m_FilterByFolder, FocusType.Passive, EditorStyles.largeLabel, GUILayout.ExpandWidth(false));
 
-            m_SearchAssetFolder = (SearchAssetFolder)EditorGUILayout.EnumPopup(m_SearchAssetFolder, m_PopupStyle, GUILayout.Width(m_FilterByFolderWith));
+            m_SearchAssetFolder = (SearchAssetFolder)EditorGUILayoutUtil.EnumPopup(m_SearchAssetFolder, m_PopupStyle, GUILayout.Width(m_FilterByFolderWith));
             using (new EditorGUI.DisabledScope(m_SearchAssetFolder != SearchAssetFolder.Folder))
                 m_Folder = EditorGUILayout.ObjectField(m_Folder, typeof(DefaultAsset), false, GUILayout.ExpandWidth(true)) as DefaultAsset;
         }
