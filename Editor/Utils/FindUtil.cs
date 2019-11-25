@@ -131,6 +131,16 @@ namespace litefeel.Finder.Editor
             return false;
         }
 
+        public static bool CheckMissingProp(Component obj)
+        {
+            if (obj == null) return false;
+            var so = new SerializedObject(obj);
+            so.Update();
+            //Debug.Log(obj);
+            var prop = so.GetIterator();
+            return UnityUtil.AnyOneProperty(CheckMissingProp, prop, true);
+        }
+
         public static bool CheckMissingProp(SerializedProperty prop)
         {
             if (prop.propertyType == SerializedPropertyType.ObjectReference

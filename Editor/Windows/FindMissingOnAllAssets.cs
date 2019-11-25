@@ -6,12 +6,14 @@ using UnityObject = UnityEngine.Object;
 namespace litefeel.Finder.Editor
 {
     using static UnityUtil;
-    using static FindUtil;
     class FindMissingOnAllAssets : FindWindowBase<UnityObject>
     {
         protected override bool InGameObjectAndChildren(GameObject prefab)
         {
-            return AnyOneTransformAndChildren(CheckMissingScriptOnTransfrom, prefab.transform);
+            return AnyOneComponentAndChildren<Component>(comp =>
+            {
+                return comp == true;
+            }, prefab.transform);
         }
     }
 }

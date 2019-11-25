@@ -9,7 +9,7 @@ namespace litefeel.Finder.Editor
     {
         protected override bool InGameObjectAndChildren(GameObject prefab)
         {
-            return UnityUtil.AnyOneTransformAndChildren(FindUtil.CheckMissingPropOnTransfrom, prefab.transform);
+            return UnityUtil.AnyOneComponentAndChildren<Component>(FindUtil.CheckMissingProp, prefab.transform);
         }
     }
 }
