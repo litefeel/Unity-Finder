@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace litefeel.Finder.Editor
 {
-    static class UnityUtil
+    public static class UnityUtil
     {
 
         public static string GetFullPath(Transform trans)
