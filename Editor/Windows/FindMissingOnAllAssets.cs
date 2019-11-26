@@ -12,7 +12,7 @@ namespace litefeel.Finder.Editor
         {
             return AnyOneComponentAndChildren<Component>(comp =>
             {
-                return comp == true;
+                return comp == null;
             }, prefab.transform);
         }
     }
