@@ -65,6 +65,11 @@ namespace litefeel.Finder.Editor
         {
             ShowWindow<FindMaterialByTexture>();
         }
+        [MenuItem("Assets/Finder/Find Materials By Shader", priority = 200)]
+        static void FindMaterialByShader()
+        {
+            ShowWindow<FindMaterialByShader>();
+        }
         [MenuItem("Assets/Finder/FindSprite")]
         static void FindSprite()
         {
