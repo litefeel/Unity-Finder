@@ -25,11 +25,6 @@ namespace litefeel.Finder.Editor
         {
             ShowWindow(typeof(FindMissingPropertyOnCurrentScene));
         }
-        [MenuItem("Assets/Finder/Find Usage", priority = 100)]
-        static void FindUsage()
-        {
-            ShowWindow<FindUsage>();
-        }
         [MenuItem("Assets/Finder/Find Prefabs By Shader", priority = 100)]
         static void FindPrefabByShader()
         {
@@ -70,20 +65,25 @@ namespace litefeel.Finder.Editor
         {
             ShowWindow<FindMaterialByShader>();
         }
-        [MenuItem("Assets/Finder/FindSprite")]
-        static void FindSprite()
+        //[MenuItem("Assets/Finder/FindSprite")]
+        //static void FindSprite()
+        //{
+        //    ShowWindow<FindSprite>();
+        //}
+        //[MenuItem("Assets/Finder/FindText")]
+        //static void FindText()
+        //{
+        //    ShowWindow<FindText>();
+        //}
+        //[MenuItem("Assets/Finder/FindFontInPrefab")]
+        //static void FindFontInPrefab()
+        //{
+        //    ShowWindow<FindFontInPrefab>();
+        //}
+        [MenuItem("Assets/Finder/Find Usage", priority = 1000)]
+        static void FindUsage()
         {
-            ShowWindow<FindSprite>();
-        }
-        [MenuItem("Assets/Finder/FindText")]
-        static void FindText()
-        {
-            ShowWindow<FindText>();
-        }
-        [MenuItem("Assets/Finder/FindFontInPrefab")]
-        static void FindFontInPrefab()
-        {
-            ShowWindow<FindFontInPrefab>();
+            ShowWindow<FindUsage>();
         }
 
 
