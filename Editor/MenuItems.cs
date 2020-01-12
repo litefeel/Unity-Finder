@@ -5,62 +5,62 @@ namespace litefeel.Finder.Editor
 {
     static class MenuItems
     {
-        [MenuItem("Assets/Finder/Find Missing Script - All Assets", priority = 0)]
+        [MenuItem("Assets/Finder/Find Missing Script - All Assets", priority = 1000)]
         static void FindMissingOnAllAssets()
         {
             ShowWindow(typeof(FindMissingOnAllAssets));
         }
-        [MenuItem("Assets/Finder/Find Missing Script - Current Scene", priority = 0)]
+        [MenuItem("Assets/Finder/Find Missing Script - Current Scene", priority = 1000)]
         static void FindMissingOnCurrentScene()
         {
             ShowWindow(typeof(FindMissingOnCurrentScene));
         }
-        [MenuItem("Assets/Finder/Find Missing Prop  - All Assets", priority = 0)]
+        [MenuItem("Assets/Finder/Find Missing Prop  - All Assets", priority = 1000)]
         static void FindMissingPropertyOnAllAssets()
         {
             ShowWindow(typeof(FindMissingPropertyOnAllAssets));
         }
-        [MenuItem("Assets/Finder/Find Missing Prop  - Current Scene", priority = 0)]
+        [MenuItem("Assets/Finder/Find Missing Prop  - Current Scene", priority = 1000)]
         static void FindMissingPropertyOnCurrentScene()
         {
             ShowWindow(typeof(FindMissingPropertyOnCurrentScene));
         }
-        [MenuItem("Assets/Finder/Find Prefabs By Shader", priority = 100)]
+        [MenuItem("Assets/Finder/Find Prefabs By Shader", priority = 1100)]
         static void FindPrefabByShader()
         {
             ShowWindow<FindPrefabByShader>();
         }
-        [MenuItem("Assets/Finder/Find Prefabs By Material", priority = 100)]
+        [MenuItem("Assets/Finder/Find Prefabs By Material", priority = 1100)]
         static void FindPrefabByMaterial()
         {
             ShowWindow<FindPrefabByMaterial>();
         }
-        [MenuItem("Assets/Finder/Find Prefabs By Script", priority = 100)]
+        [MenuItem("Assets/Finder/Find Prefabs By Script", priority = 1100)]
         static void FindPrefabByScript()
         {
             ShowWindow<FindPrefabByScript>();
         }
-        [MenuItem("Assets/Finder/Find Prefabs By Animation Clip", priority = 100)]
+        [MenuItem("Assets/Finder/Find Prefabs By Animation Clip", priority = 1100)]
         static void FindPrefabByAnimation()
         {
             ShowWindow<FindPrefabByAnimation>();
         }
-        [MenuItem("Assets/Finder/Find Prefabs By Textue", priority = 100)]
+        [MenuItem("Assets/Finder/Find Prefabs By Textue", priority = 1100)]
         static void FindPrefabByTextue()
         {
             ShowWindow<FindPrefabByTextue>();
         }
-        [MenuItem("Assets/Finder/Find Prefabs By Child Name", priority = 100)]
+        [MenuItem("Assets/Finder/Find Prefabs By Child Name", priority = 1100)]
         static void FindPrefabByChildrenName()
         {
             ShowWindow(typeof(FindPrefabByChildrenName));
         }
-        [MenuItem("Assets/Finder/Find Materials By Texture", priority = 200)]
+        [MenuItem("Assets/Finder/Find Materials By Texture", priority = 1200)]
         static void FindMaterialByTexture()
         {
             ShowWindow<FindMaterialByTexture>();
         }
-        [MenuItem("Assets/Finder/Find Materials By Shader", priority = 200)]
+        [MenuItem("Assets/Finder/Find Materials By Shader", priority = 1200)]
         static void FindMaterialByShader()
         {
             ShowWindow<FindMaterialByShader>();
@@ -80,7 +80,7 @@ namespace litefeel.Finder.Editor
         //{
         //    ShowWindow<FindFontInPrefab>();
         //}
-        [MenuItem("Assets/Finder/Find Usage", priority = 1000)]
+        [MenuItem("Assets/Finder/Find Usage", priority = 1300)]
         static void FindUsage()
         {
             ShowWindow<FindUsage>();
