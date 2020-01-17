@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -19,6 +20,14 @@ namespace litefeel.Finder.Editor
             m_ItemNames.Clear();
             var time = DateTime.Now;
             var paths = AssetDatabase.GetAllAssetPaths();
+            var list = GetSearchInFolders();
+            if(list.Length > 0)
+            {
+                string prefix = list[0];
+                var tmp = new List<string>(paths);
+                tmp.RemoveAll((f) => !f.StartsWith(prefix));
+                paths = tmp.ToArray();
+            }
             //paths = new string[] { "Assets/Art/FBmap/Materials/7.mat", "Assets/BuildOnlyAssets/FX/Materials/Eagle_high_fx.mat" };
             Finder.Progress((path) =>
             {
