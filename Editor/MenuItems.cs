@@ -50,6 +50,11 @@ namespace litefeel.Finder.Editor
         {
             ShowWindow<FindPrefabByTextue>();
         }
+        [MenuItem("Assets/Finder/Find Prefabs By Sprite", priority = 1100)]
+        static void FindPrefabBySprite()
+        {
+            ShowWindow<FindPrefabBySprite>();
+        }
         [MenuItem("Assets/Finder/Find Prefabs By Child Name", priority = 1100)]
         static void FindPrefabByChildrenName()
         {
