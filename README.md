@@ -1,5 +1,6 @@
 # Finder
 
+[![Test](https://github.com/litefeel/Unity-Finder/workflows/Test/badge.svg)](https://github.com/litefeel/Unity-Finder/actions)
 [![](https://img.shields.io/github/release/litefeel/Unity-Finder.svg?label=latest%20version)](https://github.com/litefeel/Unity-Finder/releases)
 [![](https://img.shields.io/github/license/litefeel/Unity-Finder.svg)](https://github.com/litefeel/Unity-Finder/blob/master/LICENSE.md)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/litefeel)
