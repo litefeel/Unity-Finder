@@ -13,7 +13,7 @@ namespace litefeel.Finder.Editor
     class SelectWindow : EditorWindow
     {
 
-        [MenuItem("XXXXX/XXXX")]
+        //[MenuItem("XXXXX/XXXX")]
         public static void XXXX()
         {
             var names = TypeCache.GetNames();
