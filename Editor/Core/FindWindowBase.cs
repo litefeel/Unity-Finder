@@ -22,7 +22,7 @@ namespace litefeel.Finder.Editor
         private float m_FilterByFolderWith;
         protected GUIContent m_FilterByFolder;
         protected bool m_IgnoreSearchAssetFolder;
-        protected SearchAssetFolder m_SearchAssetFolder;
+        protected SearchAssetFolder m_SearchAssetFolder = SearchAssetFolder.Folder;
         protected DefaultAsset m_Folder;
 
         protected List<string> m_ItemNames = new List<string>();
