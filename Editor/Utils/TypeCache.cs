@@ -7,29 +7,64 @@ namespace litefeel.Finder.Editor
     static class TypeCache
     {
         private static List<Type> s_TypeList;
-        private static List<string> s_NameList;
+        private static List<string> s_FullNameList;
+        private static Dictionary<string, Type> s_NameTypeMap;
+        private static Dictionary<string, Type> s_FullNameTypeMap;
 
         public static List<Type> GetTypes()
         {
             Init();
             return s_TypeList;
         }
-        public static List<string> GetNames()
+        public static List<string> GetFullNames()
         {
             Init();
-            return s_NameList;
+            return s_FullNameList;
+        }
+        public static Type FindType(string fullnameOrName)
+        {
+            if (string.IsNullOrEmpty(fullnameOrName))
+                return null;
+
+            Init();
+            Type type;
+            if (s_FullNameTypeMap.TryGetValue(fullnameOrName, out type))
+                return type;
+
+            s_NameTypeMap.TryGetValue(fullnameOrName, out type);
+            return type;
+        }
+        public static Type GetTypeByFullName(string fullname)
+        {
+            if (string.IsNullOrEmpty(fullname))
+                return null;
+            Init();
+            s_FullNameTypeMap.TryGetValue(fullname, out var type);
+            return type;
+        }
+
+        public static Type GetTypeByName(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+                return null;
+            Init();
+            s_NameTypeMap.TryGetValue(name, out var type);
+            return type;
         }
 
         private static void Init()
         {
-            if (s_TypeList != null && s_NameList != null) return;
+            if (s_TypeList != null && s_FullNameList != null) return;
 
             s_TypeList = new List<Type>();
-            s_NameList = new List<string>();
+            s_FullNameList = new List<string>();
+            s_NameTypeMap = new Dictionary<string, Type>();
+            s_FullNameTypeMap = new Dictionary<string, Type>();
 
 
-            var typeSets = new HashSet<Type>();
-            var compType = typeof(MonoBehaviour);
+            var typeSet = new HashSet<Type>();
+            var nameSet = new HashSet<string>();
+            var compType = typeof(Component);
             foreach (var assembly in System.AppDomain.CurrentDomain.GetAssemblies())
             {
                 var assemblyName = assembly.GetName().FullName;
@@ -41,11 +76,20 @@ namespace litefeel.Finder.Editor
                 {
                     if (type == compType)
                         continue;
-                    if (compType.IsAssignableFrom(type) && !typeSets.Contains(type))
+                    if (compType.IsAssignableFrom(type) && !typeSet.Contains(type))
                     {
-                        typeSets.Add(type);
+                        var fullname = type.FullName;
+                        var name = type.Name;
+
+                        typeSet.Add(type);
                         s_TypeList.Add(type);
-                        s_NameList.Add(type.Name);
+                        s_FullNameList.Add(fullname);
+                        s_FullNameTypeMap.Add(fullname, type);
+
+                        if (nameSet.Add(name))
+                            s_NameTypeMap.Add(name, type);
+                        else
+                            s_NameTypeMap.Remove(name);
                     }
                 }
             }

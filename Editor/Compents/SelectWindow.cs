@@ -15,7 +15,7 @@ namespace litefeel.Finder.Editor
         //[MenuItem("XXXXX/XXXX")]
         public static void XXXX()
         {
-            var names = TypeCache.GetNames();
+            var names = TypeCache.GetFullNames();
             var types = TypeCache.GetTypes();
             SelectWindow.get.Show(names, null, (index)=>
             {

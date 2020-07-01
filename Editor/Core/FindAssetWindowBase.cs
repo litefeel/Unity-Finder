@@ -24,12 +24,18 @@ namespace litefeel.Finder.Editor
         {
             EditorGUILayout.BeginHorizontal();
             {
+                OnBeforeAssetUI();
                 m_Asset = EditorGUILayout.ObjectField(m_Asset, typeof(TAsset), false) as TAsset;
                 OnGUIFindInScene();
             }
             EditorGUILayout.EndHorizontal();
 
             base.OnGUIBody();
+        }
+
+        protected virtual void OnBeforeAssetUI()
+        {
+            
         }
 
         protected virtual void OnGUIFindInScene()
@@ -41,7 +47,7 @@ namespace litefeel.Finder.Editor
             }
         }
 
-        protected virtual string GetFindInSceneSearchFilter()
+        protected virtual string GetFindInSceneSearchFilter(ref SearchableEditorWindow.SearchMode searchMode)
         {
             string searchFilter;
 
@@ -65,10 +71,11 @@ namespace litefeel.Finder.Editor
 
         protected virtual void OnClickFindInScene()
         {
-            var searchFilter = GetFindInSceneSearchFilter();
+            var searchMode = SearchableEditorWindow.SearchMode.All;
+            var searchFilter = GetFindInSceneSearchFilter(ref searchMode);
             SearchableEditorWindowUtil.ForEach((win) =>
             {
-                win.SetSearchFilter(searchFilter, SearchableEditorWindow.SearchMode.All);
+                win.SetSearchFilter(searchFilter, searchMode);
             }, HierarchyType.GameObjects);
         }
 
