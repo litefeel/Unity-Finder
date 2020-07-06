@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System;
+using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -9,6 +10,19 @@ namespace litefeel.Finder.Editor
     {
         private System.Type m_ScriptType;
         private string m_ScriptFullName;
+
+        public override void InitAsset(UnityEngine.Object obj)
+        {
+            base.InitAsset(obj);
+            if(m_Asset == null)
+            {
+                m_Asset = SelectionUtil.GetAsset<MonoScript>();
+            }
+            if(m_Asset == null)
+            {
+                m_Folder = SelectionUtil.GetSelectFolderAsset();
+            }
+        }
 
         protected override void ConfigValues()
         {
