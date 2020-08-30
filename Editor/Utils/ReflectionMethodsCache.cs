@@ -23,7 +23,7 @@ namespace UnityEngine.UI
                 BindingFlags.NonPublic | BindingFlags.Static, null,
                 new[] { typeof(string), typeof(GUILayoutOption[]) }, null);
             if (methodInfo != null)
-                ToolbarSearchField = (ToolbarSearchFieldCallback)UnityEngineInternal.ScriptingUtils.CreateDelegate(typeof(ToolbarSearchFieldCallback), methodInfo);
+                ToolbarSearchField = (ToolbarSearchFieldCallback)Delegate.CreateDelegate(typeof(ToolbarSearchFieldCallback), methodInfo);
 
         }
 
