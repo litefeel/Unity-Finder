@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 
 namespace litefeel.Finder.Editor
 {
     class FindUsageOnCurrentScene : FindAssetWindowBase<UnityEngine.Object, Transform>
     {
-        readonly Type m_UnityObjectType = typeof(UnityEngine.Object);
         protected override void ConfigValues()
         {
             m_DisableFind = m_Asset == null;
             m_EnabledFindInScene = false;
+            m_IgnoreSearchAssetFolder = true;
+            m_IgnoreScearchAssetType = true;
         }
 
         protected override void DoFind()
@@ -46,11 +45,6 @@ namespace litefeel.Finder.Editor
 
                 }, comp);
             }, prefab);
-        }
-
-        protected override void OnItemDoubleClick(int index)
-        {
-            AssetDatabase.OpenAsset(m_Items[index]);
         }
     }
 }
