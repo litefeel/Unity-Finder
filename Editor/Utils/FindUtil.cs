@@ -5,6 +5,7 @@ using UnityEditor;
 using UnityEditor.Experimental.SceneManagement;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace litefeel.Finder.Editor
 {
@@ -17,7 +18,7 @@ namespace litefeel.Finder.Editor
             typeof(CanvasGroup),
             typeof(CanvasRenderer),
             typeof(UnityEngine.UI.Outline),
-            
+
         };
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IgnoreType(Type type)
@@ -71,34 +72,55 @@ namespace litefeel.Finder.Editor
 
         public static void FilterCurrentStageOrScene(Func<Transform, bool> func, List<Transform> results)
         {
-            using (var scope = ListPoolScope<Transform>.Create())
+            var stage = PrefabStageUtility.GetCurrentPrefabStage();
+            if (stage != null)
             {
-                var stage = PrefabStageUtility.GetCurrentPrefabStage();
-                if (stage != null)
+                using (var scope = ListPoolScope<Transform>.Create())
                 {
-                    stage.prefabContentsRoot.transform.GetComponentsInChildren(true, scope.list);
+                    stage.prefabContentsRoot.GetComponentsInChildren(true, scope.list);
+                    FilterList(func, scope.list, results);
                 }
-                else
+            }
+            else
+            {
+                var count = EditorSceneManager.loadedSceneCount;
+                for (var i = 0; i < count; i++)
+                    FilterScene(EditorSceneManager.GetSceneAt(i), func, results);
+
+                if (Application.isPlaying)
                 {
-                    var count = EditorSceneManager.loadedSceneCount;
-                    for (var i = 0; i < count; i++)
-                    {
-                        using (var gos = ListPoolScope<GameObject>.Create())
-                        {
-                            var scene = EditorSceneManager.GetSceneAt(i);
-                            scene.GetRootGameObjects(gos.list);
-                            foreach (var go in gos.list)
-                            {
-                                go.GetComponentsInChildren(true, scope.list);
-                            }
-                        }
-                    }
+                    // DontDestroyOnLoad Scene
+                    var go = new GameObject();
+                    go.hideFlags = HideFlags.HideAndDontSave;
+                    GameObject.DontDestroyOnLoad(go);
+                    FilterScene(go.scene, func, results);
+                    GameObject.DestroyImmediate(go);
                 }
-                for (var i = 0; i < scope.list.Count; i++)
-                {
-                    if (func(scope.list[i]))
-                        results.Add(scope.list[i]);
-                }
+            }
+        }
+
+        public static void FilterScene(Scene scene, Func<Transform, bool> func, List<Transform> results)
+        {
+            var gos = ListPool<GameObject>.Get();
+            var trans = ListPool<Transform>.Get();
+
+            scene.GetRootGameObjects(gos);
+            for (var i = 0; i < gos.Count; i++)
+            {
+                trans.Clear();
+                gos[i].GetComponentsInChildren(true, trans);
+                FilterList(func, trans, results);
+            }
+            ListPool<Transform>.Release(trans);
+            ListPool<GameObject>.Release(gos);
+        }
+
+        private static void FilterList<T>(Func<T, bool> func, List<T> input, List<T> results)
+        {
+            for (var i = 0; i < input.Count; i++)
+            {
+                if (func(input[i]))
+                    results.Add(input[i]);
             }
         }
 
