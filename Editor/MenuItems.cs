@@ -15,12 +15,12 @@ namespace litefeel.Finder.Editor
         {
             ShowWindow(typeof(FindMissingOnCurrentScene));
         }
-        [MenuItem("Assets/Finder/Find Missing Prop  - All Assets", priority = 1000)]
+        [MenuItem("Assets/Finder/Find Missing Prop - All Assets", priority = 1000)]
         static void FindMissingPropertyOnAllAssets()
         {
             ShowWindow(typeof(FindMissingPropertyOnAllAssets));
         }
-        [MenuItem("Assets/Finder/Find Missing Prop  - Current Scene", priority = 1000)]
+        [MenuItem("Assets/Finder/Find Missing Prop - Current Scene", priority = 1000)]
         static void FindMissingPropertyOnCurrentScene()
         {
             ShowWindow(typeof(FindMissingPropertyOnCurrentScene));
@@ -90,7 +90,11 @@ namespace litefeel.Finder.Editor
         {
             ShowWindow<FindUsage>();
         }
-
+        [MenuItem("Assets/Finder/Find Usage - Current Scene", priority = 1301)]
+        static void FindUsageOnCurrentScene()
+        {
+            ShowWindow<FindUsageOnCurrentScene>();
+        }
 
         private static void ShowWindow<T>(string title = null) where T : EditorWindow, IFinderWindow
         {
