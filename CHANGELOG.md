@@ -1,15 +1,10 @@
-v1.3.1    May 1 2019
-[CHANGE]  Update README
 
-v1.3.0    May 1 2019
-[CHANGE]  Simplified logic
-[CHANGE]  Compatible with unity 2017
+v1.0.1    Sep 1 2020
+[NEW]   Add FindPrefabBySprite
+[NEW]   Add FindUsageOnCurrentScene
+[NEW]   Support input class name for FindPrefabByScript
+[NEW]   Support npm package
+[FIX]   Fix some error
 
-v1.2.0    Apr 10 2019
-[NEW]     Support for opening package files
-
-v1.1.0    Mar 1 2019
-[NEW]     Add assembly definition files
-
-v1.0.0    Feb 22 2019
-[NEW]     The first public version
+v1.0.0    Jan 1 2020
+[NEW]   The first public version

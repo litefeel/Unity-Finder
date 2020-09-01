@@ -13,24 +13,48 @@ Find Asset in Unity.
 ![shotscreen](Documentation~/shotscreen1.png)
 
 
-#### Requirement
+### Requirement
 
-- Unity 2018.3+
+- Unity 2018.4+
 
-#### Install
+### Install
+
+- By NPM (Ease upgrade in Package Manager UI)**Recommend**
+
+Find the manifest.json file in the Packages folder of your project and edit it to look like this:
+``` js
+{
+  {
+  "scopedRegistries": [
+    {
+      "name": "My Registry",
+      "url": "https://registry.npmjs.org",
+      "scopes": [
+        "com.litefeel"
+      ]
+    }
+  ],
+  "dependencies": {
+    "com.litefeel.finder": "1.0.0",
+    ...
+  }
+}
+```
+
+- By git url
 
 Find the manifest.json file in the Packages folder of your project and edit it to look like this:
 ``` js
 {
   "dependencies": {
-    "com.litefeel.finder": "https://github.com/litefeel/Unity-Finder.git",
+    "com.litefeel.finder": "https://github.com/litefeel/Unity-Finder.git#1.0.0",
     ...
   }
 }
 ```
 
 
-#### Support
+### Support
 
 * Create issues by issues page (https://github.com/litefeel/Unity-Finder/issues)
 * Send email to me: litefeel@gmail.com
