@@ -17,5 +17,14 @@
     "url": "https://www.litefeel.com"
   },
   "category": "Tools",
-  "type": "tool"
+  "type": "tool",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/litefeel/Unity-Finder.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/litefeel/Unity-Finder/issues"
+  },
+  "homepage": "https://github.com/litefeel/Unity-Finder#readme"
 }
