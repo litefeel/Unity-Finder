@@ -35,7 +35,7 @@ Find the manifest.json file in the Packages folder of your project and edit it t
     }
   ],
   "dependencies": {
-    "com.litefeel.finder": "1.0.0",
+    "com.litefeel.finder": "1.1.0",
     ...
   }
 }
@@ -47,7 +47,7 @@ Find the manifest.json file in the Packages folder of your project and edit it t
 ``` js
 {
   "dependencies": {
-    "com.litefeel.finder": "https://github.com/litefeel/Unity-Finder.git#1.0.0",
+    "com.litefeel.finder": "https://github.com/litefeel/Unity-Finder.git#1.1.0",
     ...
   }
 }
