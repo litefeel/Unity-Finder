@@ -18,9 +18,6 @@ jobs:
           - 2019.3.3f1
           - 2019.2.11f1
           - 2018.4.17f1
-        testMode:
-          - playmode
-          - editmode
     steps:
       # Set env
       - name: Set env UNITY_LICENSE_FILE
@@ -47,12 +44,10 @@ jobs:
 
       # Test
       - name: Run tests
-        uses: litefeel/unity-test-runner@v1.7
+        uses: webbertakken/unity-test-runner@v1.6
         id: tests
         with:
           unityVersion: ${{ matrix.unityVersion }}
-          testMode: ${{ matrix.testMode }}
-          artifactsPath: ${{ matrix.testMode }}-artifacts
 
       # # Build
       # - name: Build project
